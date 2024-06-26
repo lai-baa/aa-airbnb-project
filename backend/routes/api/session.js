@@ -58,8 +58,8 @@ router.post(
         user: safeUser
       });
     }
-);
-
+  );
+  
 // Log out
 router.delete(
     '/',
