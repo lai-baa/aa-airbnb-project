@@ -32,15 +32,19 @@ const validateSignup = [
 
 // Sign up
 router.post(
-    '/',
-    validateSignup,
-    async (req, res) => {
-      const { email, password, username } = req.body;
+  '/',
+  validateSignup,
+  async (req, res, next) => {
+    const { firstName, lastName, email, password, username } = req.body;
+    
+    try {
       const hashedPassword = bcrypt.hashSync(password);
-      const user = await User.create({ email, username, hashedPassword });
+      const user = await User.create({ firstName, lastName, email, username, hashedPassword });
   
       const safeUser = {
         id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
         email: user.email,
         username: user.username,
       };
@@ -50,7 +54,32 @@ router.post(
       return res.json({
         user: safeUser
       });
+    } catch (error) {
+      if (error.name === 'SequelizeUniqueConstraintError') {
+        const errors = {};
+        error.errors.forEach((err) => {
+          errors[err.path] = `User with that ${err.path} already exists`;
+        });
+
+        return res.status(500).json({
+          message: 'User already exists',
+          errors
+        });
+      } else if (error.name === 'SequelizeValidationError') {
+        const errors = {};
+        error.errors.forEach((err) => {
+          errors[err.path] = err.message;
+        });
+
+        return res.status(400).json({
+          message: 'Bad Request',
+          errors
+        });
+      }
+
+      next(error);
     }
+  }
 );
 
 module.exports = router;
