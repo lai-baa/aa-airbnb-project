@@ -569,6 +569,63 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async (req, res, ne
   }
 });
 
+// Get all Bookings for a Spot based on the Spot's id
+router.get('/:spotId/bookings', requireAuth, async (req, res, next) => {
+  const { spotId } = req.params;
+  const { user } = req;
+
+  try {
+    // Check if the spot exists
+    const spot = await Spot.findByPk(spotId);
+    if (!spot) {
+      const err = new Error("Spot couldn't be found");
+      err.status = 404;
+      err.errors = { message: "Spot couldn't be found" };
+      return next(err);
+    }
+
+    // Fetch bookings based on user role (owner or not)
+    let bookings;
+    if (spot.ownerId === user.id) {
+      bookings = await Booking.findAll({
+        where: { spotId },
+        include: [{ model: User, attributes: ['id', 'firstName', 'lastName'] }]
+      });
+    } else {
+      bookings = await Booking.findAll({
+        where: { spotId },
+        attributes: ['spotId', 'startDate', 'endDate']
+      });
+    }
+
+    // Format the dates
+    const formattedBookings = bookings.map(booking => {
+      const bookingData = {
+        spotId: booking.spotId,
+        startDate: moment(booking.startDate).format('YYYY-MM-DD'),
+        endDate: moment(booking.endDate).format('YYYY-MM-DD')
+      };
+      if (spot.ownerId === user.id) {
+        bookingData.User = {
+          id: booking.User.id,
+          firstName: booking.User.firstName,
+          lastName: booking.User.lastName
+        };
+        bookingData.id = booking.id;
+        bookingData.userId = booking.userId;
+        bookingData.createdAt = moment(booking.createdAt).format('YYYY-MM-DD HH:mm:ss');
+        bookingData.updatedAt = moment(booking.updatedAt).format('YYYY-MM-DD HH:mm:ss');
+      }
+      return bookingData;
+    });
+
+    res.status(200).json({ Bookings: formattedBookings });
+  } catch (error) {
+    next(error);
+  }
+});
+
+
 // Create a Booking from a Spot based on the Spot's id
 router.post('/:spotId/bookings', requireAuth, validateBooking, async (req, res, next) => {
   const { spotId } = req.params;
@@ -643,8 +700,8 @@ router.post('/:spotId/bookings', requireAuth, validateBooking, async (req, res, 
       id: newBooking.id,
       spotId: newBooking.spotId,
       userId: newBooking.userId,
-      startDate: moment(newBooking.startDate).format('YYYY-MM-DD HH:mm:ss'),
-      endDate: moment(newBooking.endDate).format('YYYY-MM-DD HH:mm:ss'),
+      startDate: moment(newBooking.startDate).format('YYYY-MM-DD'),
+      endDate: moment(newBooking.endDate).format('YYYY-MM-DD'),
       createdAt: moment(newBooking.createdAt).format('YYYY-MM-DD HH:mm:ss'),
       updatedAt: moment(newBooking.updatedAt).format('YYYY-MM-DD HH:mm:ss')
     };
@@ -655,7 +712,7 @@ router.post('/:spotId/bookings', requireAuth, validateBooking, async (req, res, 
   }
 });
 
-// Get all Bookings for a Spot based on the Spot's id
+
 
 
 module.exports = router;
