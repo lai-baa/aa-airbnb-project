@@ -217,6 +217,9 @@ router.delete('/:reviewId', requireAuth, async (req, res, next) => {
       return next(err);
     }
 
+    // Delete all related review images
+    await ReviewImage.destroy({ where: { reviewId } });
+
     // Delete the review
     await review.destroy();
 

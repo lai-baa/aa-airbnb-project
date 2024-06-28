@@ -37,7 +37,6 @@ const validateBooking = [
     handleValidationErrors
 ];
 
-// !!!!!!!!!! this is wrong, need to fix !!!!!!!!
 // Get all of the Current User's Bookings
 router.get('/current', requireAuth, async (req, res, next) => {
   const { user } = req;
@@ -53,14 +52,14 @@ router.get('/current', requireAuth, async (req, res, next) => {
           include: [
             {
               model: SpotImage,
-              attributes: ['url'],
+              attributes: [],
               where: { preview: true },
               required: false
             }
           ],
           attributes: [
             'id', 'ownerId', 'address', 'city', 'state', 'country', 'lat', 'lng', 'name', 'price',
-            [sequelize.col('SpotImages.url'), 'previewImage']
+            [sequelize.literal('(SELECT url FROM "SpotImages" WHERE "SpotImages"."spotId" = "Spot"."id" AND "SpotImages"."preview" = true LIMIT 1)'), 'previewImage']
           ]
         }
       ]
@@ -80,7 +79,7 @@ router.get('/current', requireAuth, async (req, res, next) => {
         lng: booking.Spot.lng,
         name: booking.Spot.name,
         price: booking.Spot.price,
-        previewImage: booking.Spot.SpotImages[0] ? booking.Spot.SpotImages[0].url : null
+        previewImage: booking.Spot.dataValues.previewImage || null
       },
       userId: booking.userId,
       startDate: moment(booking.startDate).format('YYYY-MM-DD'),

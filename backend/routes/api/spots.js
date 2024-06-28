@@ -3,6 +3,7 @@ const express = require('express');
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
 const { Spot, Review, Booking, SpotImage, ReviewImage, User, sequelize } = require('../../db/models');
 const { Op } = require("sequelize");
+const { query } = require('express-validator');
 
 const moment = require('moment');
 
@@ -110,21 +111,66 @@ const validateBooking = [
     handleValidationErrors
 ];
 
+// Validation middleware for query parameters
+const validateQueryParams = [
+  query('page').optional().isInt({ min: 1, max: 10 }).withMessage('Page must be between 1 and 10'),
+  query('size').optional().isInt({ min: 1, max: 20 }).withMessage('Size must be between 1 and 20'),
+  query('minLat').optional().isFloat().withMessage('Minimum latitude is invalid'),
+  query('maxLat').optional().isFloat().withMessage('Maximum latitude is invalid'),
+  query('minLng').optional().isFloat().withMessage('Minimum longitude is invalid'),
+  query('maxLng').optional().isFloat().withMessage('Maximum longitude is invalid'),
+  query('minPrice').optional().isFloat({ min: 0 }).withMessage('Minimum price must be greater than or equal to 0'),
+  query('maxPrice').optional().isFloat({ min: 0 }).withMessage('Maximum price must be greater than or equal to 0'),
+  handleValidationErrors
+];
 
-// Get all spots
-router.get('/', async (req, res, next) => {
+// Get all spots with query filters
+router.get('/', validateQueryParams, async (req, res, next) => {
+  let {
+    page = 1,
+    size = 20,
+    minLat,
+    maxLat,
+    minLng,
+    maxLng,
+    minPrice,
+    maxPrice
+  } = req.query;
+
+  page = parseInt(page);
+  size = parseInt(size);
+
+  const limit = size;
+  const offset = (page - 1) * size;
+
+  const where = {};
+
+  if (minLat) where.lat = { [Op.gte]: parseFloat(minLat) };
+  if (maxLat) where.lat = { ...where.lat, [Op.lte]: parseFloat(maxLat) };
+  if (minLng) where.lng = { [Op.gte]: parseFloat(minLng) };
+  if (maxLng) where.lng = { ...where.lng, [Op.lte]: parseFloat(maxLng) };
+  if (minPrice) where.price = { [Op.gte]: parseFloat(minPrice) };
+  if (maxPrice) where.price = { ...where.price, [Op.lte]: parseFloat(maxPrice) };
+
   try {
+    console.log("Fetching spots with filters:", { limit, offset, where });
+
     const spots = await Spot.findAll({
+      where,
+      limit,
+      offset,
       include: [
         {
           model: Review,
-          attributes: []
+          attributes: [],
+          duplicating: false,
         },
         {
           model: SpotImage,
           attributes: ['url'],
           where: { preview: true },
-          required: false
+          required: false,
+          duplicating: false,
         }
       ],
       attributes: {
@@ -139,29 +185,35 @@ router.get('/', async (req, res, next) => {
           ]
         ]
       },
-      group: ['Spot.id', 'SpotImages.url']
+      group: ['Spot.id', 'SpotImages.id']
     });
 
-    const spotsData = spots.map(spot => ({
-      id: spot.id,
-      ownerId: spot.ownerId,
-      address: spot.address,
-      city: spot.city,
-      state: spot.state,
-      country: spot.country,
-      lat: spot.lat,
-      lng: spot.lng,
-      name: spot.name,
-      description: spot.description,
-      price: spot.price,
-      createdAt: moment(spot.createdAt).format('YYYY-MM-DD HH:mm:ss'),
-      updatedAt: moment(spot.updatedAt).format('YYYY-MM-DD HH:mm:ss'),
-      avgRating: parseFloat(spot.get('avgRating')),
-      previewImage: spot.get('previewImage')
-    }));
+    const spotsData = spots.map(spot => {
+      const avgRating = spot.get('avgRating');
+      const formattedAvgRating = avgRating ? Number(parseFloat(avgRating).toFixed(1)) : "No ratings yet";
 
-    res.status(200).json({ Spots: spotsData });
+      return {
+        id: spot.id,
+        ownerId: spot.ownerId,
+        address: spot.address,
+        city: spot.city,
+        state: spot.state,
+        country: spot.country,
+        lat: spot.lat,
+        lng: spot.lng,
+        name: spot.name,
+        description: spot.description,
+        price: spot.price,
+        createdAt: moment(spot.createdAt).format('YYYY-MM-DD HH:mm:ss'),
+        updatedAt: moment(spot.updatedAt).format('YYYY-MM-DD HH:mm:ss'),
+        avgRating: formattedAvgRating,
+        previewImage: spot.get('previewImage')
+      };
+    });
+
+    res.status(200).json({ Spots: spotsData, page, size });
   } catch (error) {
+    console.error("Error fetching spots:", error);
     next(error);
   }
 });
@@ -216,7 +268,7 @@ router.get('/current', requireAuth, async (req, res, next) => {
       price: spot.price,
       createdAt: moment(spot.createdAt).format('YYYY-MM-DD HH:mm:ss'),
       updatedAt: moment(spot.updatedAt).format('YYYY-MM-DD HH:mm:ss'),
-      avgRating: spot.get('avgRating') ? parseFloat(spot.get('avgRating')) : null,
+      avgRating: spot.get('avgRating') ? Number(parseFloat(spot.get('avgRating')).toFixed(1)) : "No ratings yet",
       previewImage: spot.get('previewImage')
     }));
 
@@ -256,7 +308,7 @@ router.get('/:spotId', async (req, res, next) => {
           ],
           [
             sequelize.fn('AVG', sequelize.col('Reviews.stars')),
-            'avgStarRating'
+            'avgRating'
           ]
         ]
       },
@@ -287,7 +339,7 @@ router.get('/:spotId', async (req, res, next) => {
       createdAt: moment(spot.createdAt).format('YYYY-MM-DD HH:mm:ss'),
       updatedAt: moment(spot.updatedAt).format('YYYY-MM-DD HH:mm:ss'),
       numReviews: spot.get('numReviews'),
-      avgStarRating: parseFloat(spot.get('avgStarRating')).toFixed(1),
+      avgStarRating: spot.get('avgStarRating') ? Number(parseFloat(spot.get('avgStarRating')).toFixed(1)) : "No ratings yet",
       SpotImages: spot.SpotImages,
       Owner: spot.Owner
     };
@@ -317,7 +369,24 @@ router.post('/', requireAuth, validateSpot, async (req, res, next) => {
       price
     });
 
-    res.status(201).json(newSpot);
+    // Format createdAt and updatedAt
+    const formattedSpot = {
+      id: newSpot.id,
+      ownerId: newSpot.ownerId,
+      address: newSpot.address,
+      city: newSpot.city,
+      state: newSpot.state,
+      country: newSpot.country,
+      lat: newSpot.lat,
+      lng: newSpot.lng,
+      name: newSpot.name,
+      description: newSpot.description,
+      price: newSpot.price,
+      createdAt: moment(newSpot.createdAt).format('YYYY-MM-DD HH:mm:ss'),
+      updatedAt: moment(newSpot.updatedAt).format('YYYY-MM-DD HH:mm:ss')
+    };
+
+    res.status(201).json(formattedSpot);
   } catch (error) {
     next(error);
   }
@@ -453,6 +522,15 @@ router.delete('/:spotId', requireAuth, async (req, res, next) => {
       err.errors = { message: "You do not have permission to delete this spot" };
       return next(err);
     }
+
+    // Delete all related spot images
+    await SpotImage.destroy({ where: { spotId } });
+
+    // Delete all related reviews
+    await Review.destroy({ where: { spotId } });
+
+    // Delete all related bookings
+    await Booking.destroy({ where: { spotId } });
 
     // Delete the spot
     await spot.destroy();
@@ -657,12 +735,14 @@ router.post('/:spotId/bookings', requireAuth, validateBooking, async (req, res, 
         [Op.or]: [
           {
             startDate: {
-              [Op.between]: [startDate, endDate]
+              [Op.lte]: endDate,
+              [Op.gte]: startDate
             }
           },
           {
             endDate: {
-              [Op.between]: [startDate, endDate]
+              [Op.lte]: endDate,
+              [Op.gte]: startDate
             }
           },
           {
@@ -711,8 +791,5 @@ router.post('/:spotId/bookings', requireAuth, validateBooking, async (req, res, 
     next(error);
   }
 });
-
-
-
 
 module.exports = router;
