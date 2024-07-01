@@ -1,7 +1,7 @@
 const express = require('express');
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { Spot, Review, ReviewImage, User, sequelize } = require('../../db/models');
+const { Spot, Review, ReviewImage, User, SpotImage, sequelize } = require('../../db/models');
 
 const moment = require('moment');
 
@@ -44,8 +44,9 @@ router.get('/current', requireAuth, async (req, res, next) => {
               sequelize.literal(`(
                 SELECT "url"
                 FROM "SpotImages"
-                WHERE "SpotImages"."spotId" = "Spot"."id"
-                AND "SpotImages"."preview" = true
+                JOIN "Spots"
+                ON "SpotImages"."spotId" = "Spot"."id"
+                WHERE "SpotImages"."preview" = true
                 LIMIT 1
               )`),
               'previewImage'
