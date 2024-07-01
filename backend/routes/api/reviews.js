@@ -42,7 +42,7 @@ router.get('/current', requireAuth, async (req, res, next) => {
             'id', 'ownerId', 'address', 'city', 'state', 'country', 'lat', 'lng', 'name', 'price',
             [
               sequelize.literal(`(
-                SELECT "url"
+                SELECT "SpotImages"."url"
                 FROM "SpotImages"
                 WHERE "SpotImages"."spotId" = "Spot"."id"
                 AND "SpotImages"."preview" = true
@@ -86,6 +86,7 @@ router.get('/current', requireAuth, async (req, res, next) => {
 
     res.status(200).json({ Reviews: reviewsData });
   } catch (error) {
+    console.error("Error fetching reviews:", error);
     next(error);
   }
 });

@@ -251,7 +251,7 @@ router.get('/current', requireAuth, async (req, res, next) => {
           ]
         ]
       },
-      group: ['Spot.id', 'SpotImages.url']
+      group: ['Spot.id', 'SpotImages.id']
     });
 
     const spotsData = spots.map(spot => ({
@@ -274,6 +274,7 @@ router.get('/current', requireAuth, async (req, res, next) => {
 
     res.status(200).json({ Spots: spotsData });
   } catch (error) {
+    console.error("Error fetching spots:", error);
     next(error);
   }
 });

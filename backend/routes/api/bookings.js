@@ -90,6 +90,7 @@ router.get('/current', requireAuth, async (req, res, next) => {
 
     res.status(200).json({ Bookings: bookingsData });
   } catch (error) {
+    console.error("Error fetching bookings:", error);
     next(error);
   }
 });
