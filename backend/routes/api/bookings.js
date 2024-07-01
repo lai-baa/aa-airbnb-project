@@ -43,33 +43,21 @@ router.get('/current', requireAuth, async (req, res, next) => {
 
   try {
     const bookings = await Booking.findAll({
-      where: {
-        userId: user.id
-      },
+      where: { userId: user.id },
       include: [
         {
           model: Spot,
+          attributes: { exclude: ["createdAt", "updatedAt", "description"] },
           include: [
             {
               model: SpotImage,
-              attributes: [],
+              attributes: ["url"],
               where: { preview: true },
-              required: false
-            }
+              required: false,
+            },
           ],
-          attributes: [
-            'id', 'ownerId', 'address', 'city', 'state', 'country', 'lat', 'lng', 'name', 'price',
-            [sequelize.literal(`(
-              SELECT url 
-              FROM "SpotImages" 
-              JOIN "Spots"
-              ON "SpotImages"."spotId" = "Spot"."id"
-              WHERE "SpotImages"."preview" = true
-              LIMIT 1)`), 
-              'previewImage']
-          ]
-        }
-      ]
+        },
+      ],
     });
 
     const bookingsData = bookings.map(booking => ({

@@ -1,7 +1,8 @@
 const express = require('express');
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { Spot, Review, ReviewImage, User, SpotImage, sequelize } = require('../../db/models');
+const { Spot, Review, ReviewImage, User, SpotImage } = require('../../db/models');
+const { Sequelize } = require('sequelize');
 
 const moment = require('moment');
 
@@ -28,37 +29,27 @@ router.get('/current', requireAuth, async (req, res, next) => {
 
   try {
     const reviews = await Review.findAll({
-      where: {
-        userId: user.id
-      },
+      where: { userId: user.id },
       include: [
-        {
-          model: User,
-          attributes: ['id', 'firstName', 'lastName']
-        },
+        { model: User, attributes: ["id", "firstName", "lastName"] },
         {
           model: Spot,
-          attributes: [
-            'id', 'ownerId', 'address', 'city', 'state', 'country', 'lat', 'lng', 'name', 'price',
-            [
-              sequelize.literal(`(
-                SELECT "url"
-                FROM "SpotImages"
-                JOIN "Spots"
-                ON "SpotImages"."spotId" = "Spot"."id"
-                WHERE "SpotImages"."preview" = true
-                LIMIT 1
-              )`),
-              'previewImage'
-            ]
-          ]
+          attributes: { exclude: ["description", "createdAt", "updatedAt"] },
+          include: [
+            {
+              model: SpotImage,
+              attributes: ["url"],
+              where: { preview: true },
+              required: false,
+              limit: 1,
+            },
+          ],
         },
-        {
-          model: ReviewImage,
-          attributes: ['id', 'url']
-        }
-      ]
+        { model: ReviewImage, attributes: ["id", "url"] },
+      ],
     });
+
+    // console.log(reviews[0].Spot.SpotImages);
 
     const reviewsData = reviews.map(review => ({
       id: review.id,
