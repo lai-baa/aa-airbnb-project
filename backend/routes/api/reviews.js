@@ -42,7 +42,7 @@ router.get('/current', requireAuth, async (req, res, next) => {
             'id', 'ownerId', 'address', 'city', 'state', 'country', 'lat', 'lng', 'name', 'price',
             [
               sequelize.literal(`(
-                SELECT "SpotImages"."url"
+                SELECT "url"
                 FROM "SpotImages"
                 WHERE "SpotImages"."spotId" = "Spot"."id"
                 AND "SpotImages"."preview" = true
@@ -75,8 +75,8 @@ router.get('/current', requireAuth, async (req, res, next) => {
         city: review.Spot.city,
         state: review.Spot.state,
         country: review.Spot.country,
-        lat: review.Spot.lat,
-        lng: review.Spot.lng,
+        lat: parseFloat(review.Spot.lat),
+        lng: parseFloat(review.Spot.lng),
         name: review.Spot.name,
         price: review.Spot.price,
         previewImage: review.Spot.dataValues.previewImage
