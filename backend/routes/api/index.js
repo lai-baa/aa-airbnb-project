@@ -57,8 +57,9 @@ router.use('/reviews', reviewsRouter);
 router.use('/review-images', reviewImagesRouter);
 router.use('/spot-images', spotImagesRouter);
 
-router.post('/test', (req, res) => {
-  res.json({ requestBody: req.body });
-});
-
+// router.post('/test', (req, res) => {
+//   console.log('Request received at /api/test');
+//   console.log('Request body:', req.body);
+//   res.json({ requestBody: req.body });
+// });
 module.exports = router;
