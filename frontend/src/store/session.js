@@ -51,6 +51,27 @@ export const restoreUser = () => async (dispatch) => {
     return res;
 };
 
+// Signup thunk
+export const signup = (user) => async (dispatch) => {
+    const { username, firstName, lastName, email, password } = user;
+    const res = await csrfFetch("/api/users", {
+      method: "POST",
+      body: JSON.stringify({
+        username,
+        firstName,
+        lastName,
+        email,
+        password
+      })
+    });
+
+    if (res.ok) {
+        const data = await res.json();
+        dispatch(setUser(data.user));
+        return res;
+    }
+}
+
 // Reducers
 const sessionReducer = (state = initialState, action) => {
     switch (action.type) {

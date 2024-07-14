@@ -64,6 +64,7 @@ router.post(
         user: safeUser
       });
     } catch (error) {
+      // console.log(error);
       if (error.name === 'SequelizeUniqueConstraintError') {
         const errors = {};
         error.errors.forEach((err) => {
