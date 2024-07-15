@@ -153,7 +153,7 @@ router.get('/', validateQueryParams, async (req, res, next) => {
   if (maxPrice) where.price = { ...where.price, [Op.lte]: parseFloat(maxPrice) };
 
   try {
-    console.log("Fetching spots with filters:", { limit, offset, where });
+    // console.log("Fetching spots with filters:", { limit, offset, where });
 
     const spots = await Spot.findAll({
       where,
