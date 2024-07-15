@@ -1,50 +1,32 @@
 import {useDispatch, useSelector} from 'react-redux';
-import { getAllSpots } from '../../store/spots';
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-// import { Link } from 'react-router-dom';
+import { useEffect } from "react";
+import { Link } from "react-router-dom";
+import { getAllSpots } from "../../store/spot";
+import './Spots.css'
 
-function Spots () {
-    const navigate = useNavigate();
+const Spots = () => {
     const dispatch = useDispatch();
     const spots = Object.values(
-        useSelector((state) => (state.reports ? state.spots : [])) // populate from Redux store
+        useSelector((state) => state.spots ? state.spots : [])
     );
 
     useEffect(() => {
         dispatch(getAllSpots());
     }, [dispatch]);
 
-    const handleSpotClick = (spotId) => {
-		navigate(`/spots/${spotId}`);
-	};
-
-    // return (
-    //     <div>
-
-    //     </div>
-    // )
-
-    return (
-        <div className='spots-wrapper'>
-			{spots &&
-				spots.map((spot) => (
-					<div
-						className='spot-div-structure'
-						key={spot.id}
-						onClick={() => handleSpotClick(spot.id)}
-					>
-						<img
-							className='spot-image'
-							src={spot.previewImage}
-							alt={spot.name}
-						/>
-						<p>{spot.name}</p>
-						<p>{`$${spot.price}`}</p>
-					</div>
-				))}
-		</div>
-    )
+    return (spots.map((spot) => (
+        <div key={spot.id} className="spot-div">
+            <Link key={spot.id} to={`/api/spots/${spot.id}`} className="spot-link">
+            <img src={spot.previewImage} alt={spot.name} />
+                <h4>{spot.name}</h4>
+                <div className='spot-preview'>
+                <p>{spot.city}, {spot.state}</p>
+                <p>⭐️ {spot.avgRating}</p>
+                </div>
+                <span className='spot-price'>${spot.price}</span><span> night</span>
+            </Link>
+        </div>
+    )))
 }
 
 export default Spots;
