@@ -20,8 +20,8 @@ const Spots = () => {
             <img src={spot.previewImage} alt={spot.name} />
                 <h4>{spot.name}</h4>
                 <div className='spot-preview'>
-                <p>{spot.city}, {spot.state}</p>
-                <p>⭐️ {spot.avgRating}</p>
+                    <p>{spot.city}, {spot.state}</p>
+                    <p>⭐️ {spot.avgRating ? spot.avgRating : 'New'}</p>
                 </div>
                 <span className='spot-price'>${spot.price}</span><span> night</span>
             </Link>

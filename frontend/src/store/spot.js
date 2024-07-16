@@ -1,14 +1,22 @@
 
 // Actions
 export const GET_ALL_SPOTS =  "spot/GET_ALL_SPOTS";
+export const GET_SPOT_DETAILS = 'spots/GET_SPOT_DETAILS';
 
 // Action Creators
+// Get all spots
 export const getSpots = (spots) => {
     return {
         type: GET_ALL_SPOTS,
         spots
     }
 };
+
+// Get one spot
+export const getSpot = (spot) => ({
+	type: GET_SPOT_DETAILS,
+	spot,
+});
 
 // Thunk Action Creators
 // Get all spots
@@ -28,11 +36,12 @@ export const getAllSpots = () => async (dispatch) => {
 };
 
 // Get details of one spot
-export const loadOneSpot = (spotId) => async (dispatch) => {
+export const getSpotDetails = (spotId) => async (dispatch) => {
     const response = await fetch(`api/spots/${spotId}`);
     if (response.ok) {
       const spot = await response.json();
-      dispatch(loadAllSpots(spot));
+    //   console.log('SPOT >>>>>>>>>>>>', spot)
+      dispatch(getSpot(spot));
       return spot;
     } else {
       const error = await response.json();
@@ -41,7 +50,7 @@ export const loadOneSpot = (spotId) => async (dispatch) => {
 };
 
 // Initial State
-const initialState = {};
+const initialState = { allSpots: {}, spotDetails: {} };
 
 // Reducers
 const spotsReducer = (state = initialState, action) => {
@@ -56,6 +65,9 @@ const spotsReducer = (state = initialState, action) => {
             });
             return newState;
         }
+        case GET_SPOT_DETAILS: {
+			return { ...state, [action.spot.id]: action.spot };
+		}
         default: 
             return state;
         
