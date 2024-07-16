@@ -23,7 +23,7 @@ function Navigation({ isLoaded }) {
           <li id="home-nav">
               <NavLink to="/">
                   <div id="site-icon"><FaUmbrellaBeach /></div>
-                  AirBNB - change ***
+                  laiBNB
               </NavLink>
           </li>
           {isLoaded && (

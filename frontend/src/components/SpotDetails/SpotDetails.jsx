@@ -41,28 +41,28 @@ const SpotDetails = () => {
     return `${numReviews} reviews`
   };
 
-  const images = [];
-    spot.SpotImages.forEach(image => {
-        if (image.preview === true) {
-            images.unshift(image)
-        } else {
-            images.push(image)
-        }
-  });
+  // const images = [];
+  //   spot.SpotImages.forEach(image => {
+  //       if (image.preview === true) {
+  //           images.unshift(image)
+  //       } else {
+  //           images.push(image)
+  //       }
+  // });
   
   return (
     <div className="spot-details-div">
       <h2>{spot.name}</h2>
       <h3>{`${spot.city}, ${spot.state}, ${spot.country}`}</h3>
 
-      <div>
+      {/* <div>
         {images.map((image, index) => (
           <div key={image.id} className={`image-div image-${index + 1}`}>
               {console.log(index)}
               <img src={image.url} alt={`Image ${index + 1}`}/>
           </div>
          ))}
-      </div>
+      </div> */}
 
       <div>
         <div>
