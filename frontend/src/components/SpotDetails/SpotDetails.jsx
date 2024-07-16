@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useParams} from 'react-router-dom';
 import { getSpotDetails } from '../../store/spot';
+import { getAllReviews } from "../../store/review";
 import { FaStar } from "react-icons/fa";
 import { LuDot } from "react-icons/lu";
 import './SpotDetails.css';
@@ -9,12 +10,12 @@ import './SpotDetails.css';
 const SpotDetails = () => {
   const dispatch = useDispatch();
   const {spotId} = useParams();
-
-
   const spot = useSelector((state) => state.spots[spotId]);
+  const reviews = useSelector(state => Object.values(state.reviews));
 
   useEffect(() => {
     dispatch(getSpotDetails(spotId));
+    dispatch(getAllReviews(spotId));
   }, [dispatch, spotId]);
 
 
@@ -23,6 +24,21 @@ const SpotDetails = () => {
   const handleClick = (e) => {
       e.preventDefault();
       alert('Feature Coming Soon')
+  };
+
+  const months = ["January","February","March","April","May","June","July","August","September","October","November","December"]
+
+  const formatReviewDate = (date) => {
+    const dateSplit = date.split('-')
+    const month = Number(dateSplit[1])
+    const year = dateSplit[0]
+    return `${months[month]} ${year}`
+  };
+
+  const numReviewsText = (numReviews) => {
+    if (numReviews === 0) return '';
+    if (numReviews === 1) return '1 review'
+    return `${numReviews} reviews`
   };
 
   const images = [];
@@ -53,9 +69,9 @@ const SpotDetails = () => {
             <h2>{`Hosted by ${spot.Owner.firstName} ${spot.Owner.lastName}`}</h2>
             <p>{spot.description}</p>
          </div>
-         <div id="reserve">
+         <div id="reservation">
             <ul>
-               <li id="price"><span>{`$${spot.price}`}</span>night</li>
+               <li id="price"><span style={{fontSize: '18px', fontWeight:'500'}}>{`$${spot.price}`}</span>night</li>
                <div id="right">
                 <li><FaStar />{spot.avgStarRating}</li>
                 <LuDot />
@@ -65,6 +81,23 @@ const SpotDetails = () => {
             <button onClick={handleClick} id="reservation-button">Reserve</button>
          </div>
       </div>
+
+      <div>
+            <ul id="reviews-stats">
+               <li><FaStar />{spot.avgStarRating}</li>
+               <LuDot className={spot.numReviews === 0? 'hide': ''} />
+               <li>{numReviewsText(spot.numReviews)}</li>
+            </ul>
+            {reviews.map(review => (
+                <div key={review.id} className="review">
+                    <h3>{review.User.firstName}</h3>
+                    {/* {console.log(review)} */}
+                    <h4>{formatReviewDate(review.updatedAt)}</h4>
+                    <p>{review.review}</p>
+                </div>
+            ))}
+         </div>
+
     </div>
   )
 }

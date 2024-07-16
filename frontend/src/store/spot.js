@@ -3,7 +3,7 @@ import { csrfFetch } from "./csrf";
 // Actions
 const GET_ALL_SPOTS =  "spot/GET_ALL_SPOTS";
 const GET_SPOT_DETAILS = 'spots/GET_SPOT_DETAILS';
-// const CREATE_SPOT = "spot/CREATE_SPOT";
+const CREATE_SPOT = "spot/CREATE_SPOT";
 // const DELETE_SPOT = "spot/DELETE_SPOT";
 
 // Action Creators
@@ -22,12 +22,12 @@ export const getOneSpot = (spot) => ({
 });
 
 // Add spot
-// const addSpot = (spot) => {
-//     return {
-//       type: CREATE_SPOT,
-//       spot,
-//     };
-// };
+const addSpot = (spot) => {
+    return {
+      type: CREATE_SPOT,
+      spot,
+    };
+};
   
 // Delete spot
 // const removeSpot = (spotId) => {
@@ -68,22 +68,22 @@ export const getSpotDetails = (spotId) => async (dispatch) => {
     }
 };
 
-// // Create a spot
-// export const createSpot = (spot) => async (dispatch) => {
-//     const response = await fetch("api/spots", {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify(spot),
-//     });
-//     if (response.ok) {
-//         const newSpot = await response.json();
-//         dispatch(addSpot(newSpot));
-//         return newSpot;
-//     } else {
-//         const error = await response.json();
-//         return error;
-//     }
-// };
+// Create a spot
+export const createSpot = (spot) => async (dispatch) => {
+    const response = await csrfFetch("/api/spots", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(spot),
+    });
+    if (response.ok) {
+        const newSpot = await response.json();
+        dispatch(addSpot(newSpot));
+        return newSpot;
+    } else {
+        const error = await response.json();
+        return error;
+    }
+};
 
 // // Edit a spot
 // export const editSpot = (spot) => async (dispatch) => {

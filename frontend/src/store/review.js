@@ -26,18 +26,17 @@ export const getAllReviews = (spotId) => async (dispatch) => {
 
 // Reducers
 const reviewsReducer = (state = {}, action) => {
-    switch(action.type){
+    switch (action.type) {
         case GET_ALL_REVIEWS: {
-            const reviews = {};
-            action.reviews.forEach((review) => {
-                reviews[review.id] = review;
-            });
-            return {...state, ...reviews};
+            const reviews = {}
+            action.reviews.forEach(review => {
+                reviews[review.id] = review
+            })
+            return {...reviews}
         }
-        default: 
+        default:
             return state;
     }
-};
-
+}
 
 export default reviewsReducer;
