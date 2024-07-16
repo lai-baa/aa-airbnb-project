@@ -1,19 +1,102 @@
 /* frontend/src/components/Navigation/Navigation.css */
 
-.profile-dropdown {
-    position: absolute;
-    right: 10px;
-    top: 50px;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    background: white;
-    border: 1px solid #ccc;
-    display: flex;
-    gap: 1rem;
+nav {
+    height: 70px;
+    width: 100%;
+    border-bottom: solid 2px lightgrey;
+    padding-bottom: .5em;
 }
-  
+
+ul {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em;
+    margin: 0;
+}
+
+li {
+    display: flex;
+}
+
+.profile-dropdown {
+    display: block;
+    position: absolute;
+    top: 3.5em;
+    right: 1em;
+    background-color: #ffffff;
+    border: solid 2.5px black;
+    border-radius: 2px;
+    z-index: 1;
+    padding: .2em 1em;
+    min-width: 180px;
+}
+
+.profile-dropdown * {
+    padding: .125em 0em;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.profile-dropdown hr {
+    width: 100%;
+    border-top: 2px solid black;
+    position: relative;
+    padding: 0;
+    margin: 5px 0;
+}
 .hidden {
     display: none;
 }
-  
+
+#home-nav *{
+    color: #214e67;
+    display: flex;
+    font-size: 1em;
+    /* font-family: "Playwrite CU"; */
+    font-weight: 1000;
+    text-decoration: none;
+}
+
+#site-icon *{
+    height: 100%;
+    font-size: 2.125em;
+}
+
+#user-nav {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    cursor: pointer;
+}
+
+#toggle-menu-button {
+    height: max-content;
+    padding: .25em;
+    font-size: 1.25em;
+    border-radius: 25px;
+    box-shadow: none;
+    background-color: white;
+    color: black;
+    border: 1px lightgrey solid;
+}
+
+#toggle-menu-button:hover {
+    box-shadow: 0px 1px 5px .75px lightgray;
+}
+
+#toggle-menu-button * {
+    padding: .125em;
+}
+
+#logout {
+    justify-content: center;
+}
+
+#logout button {
+ padding: 1em;
+ border-radius: 25px;
+ box-shadow: none;
+ background-color: rgb(129, 128, 128);
+ color: white;
+}

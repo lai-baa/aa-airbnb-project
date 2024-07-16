@@ -1,0 +1,30 @@
+main {
+    padding: 2em
+}
+
+.spot-div {
+    cursor: pointer;
+}
+
+.name {
+    display: none;
+}
+
+.spot-div:hover .name {
+    display: block;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    margin: 0;
+    padding: 5px 10px;
+    background-color: rgba(0, 0, 0, 0.2);
+    color: white;
+    font-size: 14px;
+    border-radius: 5px;
+}
+
+.spot-text {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+}

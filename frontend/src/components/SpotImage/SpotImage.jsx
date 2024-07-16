@@ -1,11 +1,13 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getSpotDetails } from "../../store/spot";
-import SpotImage from "../SpotImage";
+import './SpotImage.css'
 
 const SpotImage = ({spotId}) => {
     const dispatch = useDispatch();
-    const spot = useSelector(() => state.spots ? state.spots[spotId] : null);
+    const spot = useSelector(() => state.spots[spotId]);
+
+    if (!spot || !spot.SpotImages) return null;
 
     useEffect(() => {
         dispatch(getSpotDetails(spotId));
