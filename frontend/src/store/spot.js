@@ -50,24 +50,24 @@ export const getSpotDetails = (spotId) => async (dispatch) => {
 };
 
 // Initial State
-const initialState = { allSpots: {}, spotDetails: {} };
+// const initialState = { allSpots: {}, spotDetails: {} };
 
 // Reducers
-const spotsReducer = (state = initialState, action) => {
+const spotsReducer = (state = {}, action) => {
     switch (action.type) {
         case GET_ALL_SPOTS: {
-            const newState = {...state};
+            const spots = {};
             // console.log("ACTION.SPOTS >>>>>>>>", action.spots)
             // const spotsArr = Object.values(action.spots);
             // console.log('Spots Array >>>>>>>>>>>', spotsArr)
             action.spots.forEach((spot) => {
-                newState[spot.id] = spot;
+                spots[spot.id] = spot;
             });
-            return newState;
+            return {...state, ...spots};
         }
-        case GET_SPOT_DETAILS: {
-			return { ...state, [action.spot.id]: action.spot };
-		}
+        // case GET_SPOT_DETAILS: {
+		// 	return { ...state, [action.spot.id]: action.spot };
+		// }
         default: 
             return state;
         

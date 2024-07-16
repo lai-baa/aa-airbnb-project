@@ -1,11 +1,13 @@
 import {useDispatch, useSelector} from 'react-redux';
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from 'react-router-dom'
+import { FaStar } from "react-icons/fa";
 import { getAllSpots } from "../../store/spot";
 import './Spots.css'
 
 const Spots = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const spots = Object.values(
         useSelector((state) => state.spots ? state.spots : [])
     );
@@ -14,19 +16,36 @@ const Spots = () => {
         dispatch(getAllSpots());
     }, [dispatch]);
 
-    return (spots.map((spot) => (
-        <div key={spot.id} className="spot-div">
-            <Link key={spot.id} to={`/api/spots/${spot.id}`} className="spot-link">
-            <img src={spot.previewImage} alt={spot.name} />
-                <h4>{spot.name}</h4>
-                <div className='spot-preview'>
-                    <p>{spot.city}, {spot.state}</p>
-                    <p>⭐️ {spot.avgRating ? spot.avgRating : 'New'}</p>
+    const handleClick = (spot) => {
+        navigate(`/spots/${spot.id}`)
+    };
+
+    const handleRating = (avgRating) => {
+        if (isNaN(avgRating)) avgRating = 'New'
+        return avgRating;
+    };
+
+    return (
+        <main className='spots-div'>
+            {spots.map(spot => (
+                <div key={spot.id} className='spot-div'
+                onClick={() => handleClick(spot)}
+                >
+                <div className='image-div'>
+                    <p className='name' data->{spot.name}</p>
+                    <img src={spot.previewImage}/>
                 </div>
-                <span className='spot-price'>${spot.price}</span><span> night</span>
-            </Link>
-        </div>
-    )))
+                <div className='spot-text'>
+                    <div>
+                        <p>{`${spot.city}, ${spot.state}`}</p>
+                        <p><span style={{fontWeight: 'bold'}}>${spot.price}</span> night</p>
+                    </div>
+                    <p style={{fontWeight: 'bold'}}><FaStar />{handleRating(spot.avgRating)}</p>
+                </div>
+                </div>
+            ))}
+        </main>
+    )
 }
 
 export default Spots;
