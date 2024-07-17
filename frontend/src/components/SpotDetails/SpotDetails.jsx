@@ -29,8 +29,8 @@ const SpotDetails = () => {
   };
 
   const handleRating = (avgRating) => {
-    avgRating = (+avgRating).toFixed(1)
-    if (isNaN(avgRating)) avgRating = 'New'
+    avgRating = (+avgRating).toFixed(1);
+    if (isNaN(avgRating) || avgRating === '0.0') avgRating = 'New';
     return avgRating;
   };
 
@@ -72,8 +72,8 @@ const SpotDetails = () => {
          ))}
       </div>
 
-      <div>
-        <div>
+      <div className="spot-description-reservation">
+        <div id='spot-descriptions'>
             <h2>{`Hosted by ${spot.Owner.firstName} ${spot.Owner.lastName}`}</h2>
             <p>{spot.description}</p>
          </div>

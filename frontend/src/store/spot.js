@@ -89,9 +89,9 @@ export const createSpot = (spot) => async (dispatch) => {
 export const getAllSpotsCurrentUser = () => async (dispatch) => {
     const response = await csrfFetch('/api/spots/current');
     if(response.ok) {
-        const spots = response.json();
+        const spots = await response.json();
         dispatch(getSpots(spots.Spots));
-        return spots.Spots;
+        return spots;
     } else {
         const error = await response.json();
         return error;

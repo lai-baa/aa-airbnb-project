@@ -2,16 +2,18 @@
     padding: 20px;
     font-family: Arial, sans-serif;
     max-width: 1000px;
-    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    margin: 30px auto; /* Center the content horizontally */
 }
 
 .spot-details-div h2 {
-    font-size: 24px;
+    font-size: 30px;
     font-weight: bold;
 }
 
 .spot-details-div h3 {
-    font-size: 18px;
+    font-size: 20px;
     color: gray;
 }
 
@@ -46,15 +48,28 @@
     grid-row: span 1;
 }
 
-#reservation {
+/* Add flexbox to align the spot-descriptions and reservation sections */
+.spot-description-reservation {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin: 20px 0;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background-color: #f9f9f9;
+    align-items: flex-start;
+}
+
+#spot-descriptions {
+    flex: 1;
+    margin-right: 20px;
+}
+
+#reservation {
+    border: solid 1px lightgrey;
+    box-shadow: 2px 2px 2px lightgray;
+    border-radius: 10px;
+    width: 300px;
+    padding: 20px;
+}
+
+.reservation * {
+    margin: 5px 0px;
 }
 
 #reservation ul {
@@ -85,15 +100,18 @@
 }
 
 #reservation-button {
-    padding: 10px 20px;
-    background-color: #ff5a5f;
-    color: white;
+    padding: 10px 30px;
     border: none;
     border-radius: 5px;
-    cursor: pointer;
+    color: white;
+    font-weight: bold;
+    font-size: 15px;
+    background-color: #ff5a5f;
+    width: 100%;
 }
 
 #reservation-button:hover {
+    cursor: pointer;
     background-color: #e94e4e;
 }
 

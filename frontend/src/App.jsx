@@ -7,8 +7,8 @@ import Navigation from './components/Navigation/Navigation';
 import Spots from './components/Spots/Spots';
 import SpotDetails from './components/SpotDetails/SpotDetails';
 import CreateSpot from './components/CreateSpot/CreateSpot';
-import * as sessionActions from './store/session';
 import ManageSpots from './components/ManageSpots/ManageSpots';
+import * as sessionActions from './store/session';
 
 function Layout() {
   const dispatch = useDispatch();

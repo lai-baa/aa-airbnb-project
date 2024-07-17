@@ -1,0 +1,96 @@
+/* Container for all spots */
+.manage-spots-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    gap: 20px;
+}
+
+.create-spot-button {
+    margin-top: 10px;
+    font-size: 16px;
+    color: white;
+    background-color: #ff5a5f;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    text-align: center;
+}
+
+.create-spot-button:hover {
+    background-color: darkpurple;
+    text-decoration: none;
+}
+
+/* Container for the image grid */
+.manage-spots-image-div {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    width: 100%;
+    max-width: 1200px;
+}
+
+/* Individual spot container */
+.manage-spot-div {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+}
+
+.manage-spot-div:hover {
+    transform: translateY(-5px);
+}
+
+.manage-spot-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.manage-spot-div img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+.manage-spot-div h4 {
+    font-size: 1.5em;
+    margin: 10px;
+}
+
+.manage-spot-text {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 10px;
+}
+
+.manage-spot-price {
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+.curr-user-spot-buttons {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+}
+
+.curr-user-spot-buttons button {
+    background-color: #ff5a5f;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.curr-user-spot-buttons button:hover {
+    background-color: #e94e4e;
+}
+

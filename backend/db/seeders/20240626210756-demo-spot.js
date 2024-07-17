@@ -31,7 +31,7 @@ module.exports = {
         price: 100.00
       },
       {
-        ownerId: 2,
+        ownerId: 1,
         address: '456 Elm St',
         city: 'Los Angeles',
         state: 'CA',
@@ -43,7 +43,7 @@ module.exports = {
         price: 200.00
       },
       {
-        ownerId: 3,
+        ownerId: 1,
         address: '789 Oak St',
         city: 'New York',
         state: 'NY',
@@ -55,7 +55,7 @@ module.exports = {
         price: 150.00
       },
       {
-        ownerId: 4,
+        ownerId: 2,
         address: '101 Pine St',
         city: 'Chicago',
         state: 'IL',
@@ -67,7 +67,7 @@ module.exports = {
         price: 120.00
       },
       {
-        ownerId: 5,
+        ownerId: 2,
         address: '202 Maple St',
         city: 'Miami',
         state: 'FL',
