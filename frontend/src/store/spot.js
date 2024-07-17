@@ -4,7 +4,7 @@ import { csrfFetch } from "./csrf";
 const GET_ALL_SPOTS =  "spot/GET_ALL_SPOTS";
 const GET_SPOT_DETAILS = 'spots/GET_SPOT_DETAILS';
 const CREATE_SPOT = "spot/CREATE_SPOT";
-// const DELETE_SPOT = "spot/DELETE_SPOT";
+const DELETE_SPOT = "spot/DELETE_SPOT";
 
 // Action Creators
 // Get all spots
@@ -30,12 +30,12 @@ const addSpot = (spot) => {
 };
   
 // Delete spot
-// const removeSpot = (spotId) => {
-//     return {
-//       type: DELETE_SPOT,
-//       spotId,
-//     };
-// };
+const removeSpot = (spotId) => {
+    return {
+      type: DELETE_SPOT,
+      spotId,
+    };
+};
 
 // Thunk Action Creators
 // Get all spots
@@ -102,19 +102,19 @@ export const createSpot = (spot) => async (dispatch) => {
 //     }
 // };
 
-// // Delete a spot
-// export const deleteSpot = (spotId) => async (dispatch) => {
-//     const response = await csrfFetch(`api/spots/${spotId}`, {
-//       method: "DELETE",
-//     });
-//     if (response.ok) {
-//       dispatch(removeSpot(spotId));
-//       return { message: "Successfully deleted" };
-//     } else {
-//       const error = await response.json();
-//       return error;
-//     }
-// };
+// Delete a spot
+export const deleteSpot = (spotId) => async (dispatch) => {
+    const response = await csrfFetch(`api/spots/${spotId}`, {
+      method: "DELETE",
+    });
+    if (response.ok) {
+      dispatch(removeSpot(spotId));
+      return { message: "Successfully deleted" };
+    } else {
+      const error = await response.json();
+      return error;
+    }
+};
 
 // Initial State
 // const initialState = { allSpots: {}, spotDetails: {} };
@@ -150,11 +150,11 @@ const spotsReducer = (state = {}, action) => {
             };
             return newState;
         }
-        // case DELETE_SPOT: {
-        //     const newState = { ...state };
-        //     delete newState[action.spotId];
-        //     return newState;
-        // }
+        case DELETE_SPOT: {
+            const newState = { ...state };
+            delete newState[action.spotId];
+            return newState;
+        }
         default: 
             return state;
         
