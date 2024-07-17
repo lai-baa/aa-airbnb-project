@@ -8,25 +8,40 @@ import { LuDot } from "react-icons/lu";
 import './SpotDetails.css';
 
 const SpotDetails = () => {
+  // console.log('>>>>>>>>>>>>>>>>>>>>>>>')
   const dispatch = useDispatch();
   const {spotId} = useParams();
   const spot = useSelector((state) => state.spots[spotId]);
   const reviews = useSelector(state => Object.values(state.reviews));
 
-  console.log('>>>>>>>>>>>>>>>>>>>',spot)
+  // console.log('>>>>>>>>>>>>>>>>>>>',spot)
 
   useEffect(() => {
     dispatch(getSpotDetails(spotId));
     dispatch(getAllReviews(spotId));
   }, [dispatch, spotId]);
 
-
-  if (!spot) return <h2>Loading...</h2>;
+  if (!spot || !spot.SpotImages) return <h2>Loading...</h2>;
 
   const handleClick = (e) => {
       e.preventDefault();
       alert('Feature Coming Soon')
   };
+
+  const handleRating = (avgRating) => {
+    avgRating = (+avgRating).toFixed(1)
+    if (isNaN(avgRating)) avgRating = 'New'
+    return avgRating;
+  };
+
+  const images = [];
+    spot.SpotImages.forEach(image => {
+        if (image.preview === true) {
+            images.unshift(image)
+        } else {
+            images.push(image)
+        }
+  });
 
   const months = ["January","February","March","April","May","June","July","August","September","October","November","December"]
 
@@ -42,29 +57,20 @@ const SpotDetails = () => {
     if (numReviews === 1) return '1 review'
     return `${numReviews} reviews`
   };
-
-  // const images = [];
-  //   spot.SpotImages.forEach(image => {
-  //       if (image.preview === true) {
-  //           images.unshift(image)
-  //       } else {
-  //           images.push(image)
-  //       }
-  // });
   
   return (
     <div className="spot-details-div">
       <h2>{spot.name}</h2>
       <h3>{`${spot.city}, ${spot.state}, ${spot.country}`}</h3>
 
-      {/* <div>
-        {images.map((image, index) => (
-          <div key={image.id} className={`image-div image-${index + 1}`}>
-              {console.log(index)}
-              <img src={image.url} alt={`Image ${index + 1}`}/>
-          </div>
+      <div className="images-div">
+         {images.map((image, index) => (
+            <div key={image.id} className={`image-div image-${index + 1}`}>
+                {console.log(index)}
+                <img src={image.url} alt={`Image ${index + 1}`}/>
+            </div>
          ))}
-      </div> */}
+      </div>
 
       <div>
         <div>
@@ -75,9 +81,9 @@ const SpotDetails = () => {
             <ul>
                <li id="price"><span style={{fontSize: '18px', fontWeight:'500'}}>{`$${spot.price}`}</span>night</li>
                <div id="right">
-                <li><FaStar />{spot.avgStarRating}</li>
+                <li><FaStar />{handleRating(spot.avgStarRating)}</li>
                 <LuDot />
-                <li>{spot.numReviews} reviews</li>
+                <li>{numReviewsText(spot.numReviews)}</li>
                </div>
             </ul>
             <button onClick={handleClick} id="reservation-button">Reserve</button>
