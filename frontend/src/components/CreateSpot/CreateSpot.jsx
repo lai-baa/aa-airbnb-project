@@ -8,64 +8,74 @@ export const NewSpot = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const [formData, setFormData] = useState({
-		country: '',
-		address: '',
-		city: '',
-		state: '',
-		description: '',
-		title: '',
-		price: '',
-		image1: '',
-		image2: '',
-		image3: '',
-		image4: '',
-		image5: '',
-	});
-
+	const [country, setCountry] = useState('');
+	const [address, setAddress] = useState('');
+	const [city, setCity] = useState('');
+	const [state, setState] = useState('');
+	const [description, setDescription] = useState('');
+	const [title, setTitle] = useState('');
+	const [price, setPrice] = useState('');
+	const [image1, setImage1] = useState('');
+	const [image2, setImage2] = useState('');
+	const [image3, setImage3] = useState('');
+	const [image4, setImage4] = useState('');
+	const [image5, setImage5] = useState('');
+	
     const [errors, setErrors] = useState({});
 	const [formIsValid, setFormIsValid] = useState(false);
 	const [hasSubmitted, setHasSubmitted] = useState(false);
 
     useEffect(() => {
 		const newErrors = {};
-		if (!formData.country) newErrors.country = 'Country is required';
-		if (!formData.address) newErrors.address = 'Street Address is required';
-		if (!formData.city) newErrors.city = 'City is required';
-		if (!formData.state) newErrors.state = 'State is required';
-		if (formData.description.length < 30)
+		if (!country) newErrors.country = 'Country is required';
+		if (!address) newErrors.address = 'Street Address is required';
+		if (!city) newErrors.city = 'City is required';
+		if (!state) newErrors.state = 'State is required';
+		if (description.length < 30)
 			newErrors.description = 'Description needs 30 or more characters';
-		if (!formData.title) newErrors.title = 'Title is required';
-		if (!formData.price) newErrors.price = 'Price per night is required';
-		if (!formData.image1) newErrors.image1 = 'Preview Image URL is required';
+		if (!title) newErrors.title = 'Title is required';
+		if (!price) newErrors.price = 'Price per night is required';
+		if (!image1) newErrors.image1 = 'Preview Image URL is required';
 
 		setErrors(newErrors);
 
 		const isValid = Object.keys(newErrors).length === 0;
 		setFormIsValid(isValid);
-	}, [formData]);
+	}, [country, address, city, state, description, title, price, image1]);
 
-    const handleChange = (e) => {
-		setFormData({ ...formData, [e.target.id]: e.target.value });
+	const handleChange = (e) => {
+		const { id, value } = e.target;
+		
+		if (id === 'country') setCountry(value);
+		else if (id === 'address') setAddress(value);
+		else if (id === 'city') setCity(value);
+		else if (id === 'state') setState(value);
+		else if (id === 'description') setDescription(value);
+		else if (id === 'title') setTitle(value);
+		else if (id === 'price') setPrice(value);
+		else if (id === 'image1') setImage1(value);
+		else if (id === 'image2') setImage2(value);
+		else if (id === 'image3') setImage3(value);
+		else if (id === 'image4') setImage4(value);
+		else if (id === 'image5') setImage5(value);
 	};
-
     const handleSubmit = async (e) => {
 		e.preventDefault();
 		setHasSubmitted(true);
 		const spot = {
-			country: formData.country,
-			address: formData.address,
-			city: formData.city,
-			state: formData.state,
-			description: formData.description,
-			name: formData.title,
-			price: formData.price,
+			country: country,
+			address: address,
+			city: city,
+			state: state,
+			description: description,
+			name: title,
+			price: price,
 			images: [
-				formData.image1,
-				formData.image2,
-				formData.image3,
-				formData.image4,
-				formData.image5,
+				image1,
+				image2,
+				image3,
+				image4,
+				image5,
 			].filter((url) => url),
 		};
 
@@ -76,13 +86,13 @@ export const NewSpot = () => {
 	};
 
     return (
-		<div className='create-spot-wrapper'>
+		<div className='create-spot-div'>
 			<form
 				className='create-spot-form'
 				action='POST'
 				onSubmit={handleSubmit}
 			>
-				<div className='create-spot-heading'>
+				<div className='create-spot-title'>
 					<h2>Create a New Spot</h2>
 					<h3>Where&apos;s your place located?</h3>
 					<p>
@@ -92,8 +102,8 @@ export const NewSpot = () => {
 				</div>
 				{hasSubmitted && Object.keys(errors).length > 0 && (
 					<div className='error-messages'>
-						{Object.values(errors).map((error, idx) => (
-							<p key={idx}>{error}</p>
+						{Object.values(errors).map((error, index) => (
+							<p key={index}>{error}</p>
 						))}
 					</div>
 				)}
@@ -103,7 +113,7 @@ export const NewSpot = () => {
 						id='country'
 						placeholder='Country'
 						type='text'
-						value={formData.country}
+						value={country}
 						onChange={handleChange}
 					/>
 					{hasSubmitted && errors.country && (
@@ -115,7 +125,7 @@ export const NewSpot = () => {
 						id='address'
 						placeholder='Street Address'
 						type='text'
-						value={formData.address}
+						value={address}
 						onChange={handleChange}
 					/>
 					{hasSubmitted && errors.address && (
@@ -129,7 +139,7 @@ export const NewSpot = () => {
 								id='city'
 								placeholder='City'
 								type='text'
-								value={formData.city}
+								value={city}
 								onChange={handleChange}
 							/>
 							{hasSubmitted && errors.city && (
@@ -142,7 +152,7 @@ export const NewSpot = () => {
 								id='state'
 								placeholder='State'
 								type='text'
-								value={formData.state}
+								value={state}
 								onChange={handleChange}
 							/>
 							{hasSubmitted && errors.state && (
@@ -167,7 +177,7 @@ export const NewSpot = () => {
 						className='form-textarea'
 						placeholder='Please write at least 30 characters'
 						id='description'
-						value={formData.description}
+						value={description}
 						onChange={handleChange}
 					/>
 					{hasSubmitted && errors.description && (
@@ -190,7 +200,7 @@ export const NewSpot = () => {
 						placeholder='Name of your spot'
 						type='text'
 						id='title'
-						value={formData.title}
+						value={title}
 						onChange={handleChange}
 					/>
 					{hasSubmitted && errors.title && (
@@ -215,7 +225,7 @@ export const NewSpot = () => {
 							placeholder='Price per night (USD)'
 							type='number'
 							id='price'
-							value={formData.price}
+							value={price}
 							onChange={handleChange}
 						/>
 					</label>
@@ -236,7 +246,7 @@ export const NewSpot = () => {
 						placeholder='Image URL'
 						type='url'
 						id='image1'
-						value={formData.image1}
+						value={image1}
 						onChange={handleChange}
 					/>
 					{hasSubmitted && errors.image1 && (
@@ -247,7 +257,7 @@ export const NewSpot = () => {
 						placeholder='Image URL'
 						type='url'
 						id='image2'
-						value={formData.image2}
+						value={image2}
 						onChange={handleChange}
 					/>
 
@@ -255,7 +265,7 @@ export const NewSpot = () => {
 						placeholder='Image URL'
 						type='url'
 						id='image3'
-						value={formData.image3}
+						value={image3}
 						onChange={handleChange}
 					/>
 
@@ -263,7 +273,7 @@ export const NewSpot = () => {
 						placeholder='Image URL'
 						type='url'
 						id='image4'
-						value={formData.image4}
+						value={image4}
 						onChange={handleChange}
 					/>
 
@@ -271,7 +281,7 @@ export const NewSpot = () => {
 						placeholder='Image URL'
 						type='url'
 						id='image5'
-						value={formData.image5}
+						value={image5}
 						onChange={handleChange}
 					/>
 				</div>
