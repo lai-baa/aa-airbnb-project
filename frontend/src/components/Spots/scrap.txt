@@ -1,0 +1,17 @@
+    return (
+        <div className='spots-div'>
+            {spots.map(spot => (
+                <div key={spot.id} className='spot-div'>
+                <Link key={spot.id} to={`/spots/${spot.id}`} className="spot-div-link">
+                <img src={spot.previewImage} alt={spot.name} />
+                    <p>{spot.name}</p>
+                    <div className='spot-text'>
+                    <span>{spot.city}, {spot.state}</span>
+                    <p style={{fontWeight: 'bold'}}><FaStar />{handleRating(spot.avgRating)}</p>
+                    </div>
+                    <span className='spot-price'>${spot.price}</span><span> night</span>
+                </Link>
+            </div>
+            ))}
+        </div>
+    )

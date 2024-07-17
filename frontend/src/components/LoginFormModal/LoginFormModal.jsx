@@ -29,6 +29,9 @@ const LoginFormModal = () => {
                 const data = await res.json();
                 if (data && data.errors) {
                     setErrors(data.errors)
+                } 
+                if (data.message) {
+                    setErrors({message: "The provided credentials were invalid"});
                 }
             });
     }
@@ -56,23 +59,19 @@ const LoginFormModal = () => {
                 Username or Email
                 <input
                     type="text"
-                    // placeholder="username or email"
                     value={credential}
                     onChange={(e) => setCredential(e.target.value)}
                     name="credential"
                 />
-                {/* {errors.credential && <p className='error'>{errors.credential}</p>} */}
             </label>
             <label>
                 Password
                 <input
-                    type="text"
-                    // placeholder="password"
+                    type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     name="password"
                 />
-                {/* {errors.password && <p className='error'>{errors.password}</p>} */}
             </label>
             <button type='submit' disabled={disabled} className={disabled? "disabled" : ""}>Log In</button>
             <li onClick={() => demoUser()} id='demoUser'>Log in as Demo User</li>

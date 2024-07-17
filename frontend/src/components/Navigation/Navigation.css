@@ -49,7 +49,7 @@ li {
     display: none;
 }
 
-#home-nav *{
+#nav-link-home *{
     color: #214e67;
     display: flex;
     font-size: 1em;

@@ -5,6 +5,7 @@ const cors = require('cors');
 const csurf = require('csurf');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
+const path = require('path');
 
 const routes = require('./routes');
 
@@ -81,6 +82,8 @@ app.use((err, _req, res, _next) => {
       stack: null
     });
 });
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 module.exports = app;
 

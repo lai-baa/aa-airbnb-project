@@ -21,18 +21,19 @@ const Spots = () => {
     };
 
     const handleRating = (avgRating) => {
+        avgRating = (+avgRating).toFixed(1)
         if (isNaN(avgRating)) avgRating = 'New'
         return avgRating;
     };
 
     return (
-        <main className='spots-div'>
+        <div className='spots-div'>
             {spots.map(spot => (
                 <div key={spot.id} className='spot-div'
                 onClick={() => handleClick(spot)}
                 >
-                <div className='image-div'>
-                    <p className='name' data->{spot.name}</p>
+                <div className='spot-image'>
+                    <p className='name'>{spot.name}</p>
                     <img src={spot.previewImage}/>
                 </div>
                 <div className='spot-text'>
@@ -44,7 +45,7 @@ const Spots = () => {
                 </div>
                 </div>
             ))}
-        </main>
+        </div>
     )
 }
 

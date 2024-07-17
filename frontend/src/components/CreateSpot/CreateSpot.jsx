@@ -69,7 +69,7 @@ export const NewSpot = () => {
 			].filter((url) => url),
 		};
 
-		const newSpot = await dispatch(addANewSpot(spot));
+		const newSpot = await dispatch(createSpot(spot));
 		if (newSpot) {
 			navigate(`/spots/${newSpot.id}`);
 		}

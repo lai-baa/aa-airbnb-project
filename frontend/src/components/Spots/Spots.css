@@ -1,30 +1,54 @@
-main {
-    padding: 2em
+/* Spots.css */
+/* Spots.css */
+
+.spots-div {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px;
 }
 
 .spot-div {
-    cursor: pointer;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease;
 }
 
-.name {
-    display: none;
+.spot-div:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.spot-div:hover .name {
-    display: block;
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    margin: 0;
-    padding: 5px 10px;
-    background-color: rgba(0, 0, 0, 0.2);
-    color: white;
-    font-size: 14px;
-    border-radius: 5px;
+.spot-image {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+.spot-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .spot-text {
-    display: flex;
-    justify-content: space-between;
-    font-size: 12px;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.spot-text p {
+  margin: 5px 0;
+}
+
+.name {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin: 10px;
+}
+
+.fa-star {
+  color: #FFD700;
 }

@@ -1,9 +1,10 @@
 // frontend/src/components/SignupFormPage/SignupFormPage.jsx
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { useModal } from '../../context/Modal';
-import * as sessionActions from '../../store/session';
+import { useModal } from '../../context/Modal.jsx';
+import { signup } from '../../store/session.js';
+// import * as sessionActions from '../../store/session';
 import './SignupForm.css';
 
 function SignupFormModal() {
@@ -15,34 +16,43 @@ function SignupFormModal() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
+  const [isDisabled, setIsDisabled] = useState(true);
   const { closeModal } = useModal();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (password === confirmPassword) {
-      setErrors({});
-      return dispatch(
-        sessionActions.signup({
-          email,
-          username,
-          firstName,
-          lastName,
-          password
-        })
-      )
-        .then(closeModal)
-        .catch(async (res) => {
-          const data = await res.json();
-          if (data?.errors) {
-            setErrors(data.errors);
-          }
-        });
-    }
-    return setErrors({
-      confirmPassword: "Confirm Password field must be the same as the Password field"
-    });
-  };
+  useEffect(() => {
+    setErrors({})
 
+    if (username.length < 4 ||password.length < 6 || firstName.length < 2 || lastName.length < 2 || confirmPassword.length < 6 || !email.length
+    )  return setIsDisabled(true)
+
+    setIsDisabled(false)
+  }, [username, password, email, firstName, lastName, confirmPassword])
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (password !== confirmPassword) {
+        setErrors({confirmPassword: 'Passwords do not match'});
+    } else {
+        const payload = {
+            username,
+            firstName,
+            lastName,
+            email,
+            password
+        }
+
+       dispatch(signup(payload))
+            .then(closeModal)
+            .catch(async (res) => {
+                const data = await res.json();
+                if (data?.errors) {
+                    setErrors(data.errors);
+                }
+            })
+
+    }
+  }
   return (
     <div className='sign-up-div'>
       <h1>Sign Up</h1>
@@ -103,7 +113,7 @@ function SignupFormModal() {
         {errors.confirmPassword && (
           <p className='error-message'>{errors.confirmPassword}</p>
         )}
-        <button type="submit">Sign Up</button>
+        <button disabled={isDisabled} className={isDisabled? 'disabled' : ''}  type='submit'>Signup</button>
       </form>
     </div>
   );
