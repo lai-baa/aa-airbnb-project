@@ -66,7 +66,7 @@ const SpotDetails = () => {
       <div className="images-div">
          {images.map((image, index) => (
             <div key={image.id} className={`image-div image-${index + 1}`}>
-                {console.log(index)}
+                {/* {console.log(index)} */}
                 <img src={image.url} alt={`Image ${index + 1}`}/>
             </div>
          ))}

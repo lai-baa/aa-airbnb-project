@@ -12,6 +12,8 @@ const Spots = () => {
         useSelector((state) => state.spots ? state.spots : [])
     );
 
+    // console.log('SPOTS >>>>>>>>>>>>>>>>>>>>',spots)
+
     useEffect(() => {
         dispatch(getAllSpots());
     }, [dispatch]);

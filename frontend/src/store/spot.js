@@ -85,6 +85,19 @@ export const createSpot = (spot) => async (dispatch) => {
     }
 };
 
+// Get all spots of a current user
+export const getAllSpotsCurrentUser = () => async (dispatch) => {
+    const response = await csrfFetch('/api/spots/current');
+    if(response.ok) {
+        const spots = response.json();
+        dispatch(getSpots(spots.Spots));
+        return spots.Spots;
+    } else {
+        const error = await response.json();
+        return error;
+    }
+};
+
 // // Edit a spot
 // export const editSpot = (spot) => async (dispatch) => {
 //     const response = await csrfFetch(`api/spots/${spot.id}`, {
