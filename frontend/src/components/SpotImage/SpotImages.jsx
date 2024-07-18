@@ -1,15 +1,17 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getOneSpot } from "../../store/spot";
+import { getSpotDetails } from "../../store/spot";
 import './SpotImages.css'
 
-const SpotImages = ({spotId}) => {
+const SpotImage = ({spotId}) => {
     const dispatch = useDispatch();
     
     const spot = useSelector((state) => state.spots[spotId]);
+    console.log("info--->", spot);
+
 
     useEffect(() => {
-        dispatch(getOneSpot(spotId));
+        dispatch(getSpotDetails(spotId));
     }, [dispatch, spotId]);
 
     if (!spot || !spot.SpotImages) return null;
@@ -17,15 +19,18 @@ const SpotImages = ({spotId}) => {
     return (
         <div className="spot-image-div">
             <div className="large-image image">
-                <img src={spot.SpotImages[0].url} alt={spot.name} />
+                <img src={spot.SpotImages[0]?.url} alt={spot.name} />
             </div>
             {spot.SpotImages.slice(1, 5).map((image) => (
                 <div className="small-image image" key={image.id}>
                     <img src={image.url} alt={image.id} />
                 </div>
             ))}
-        </div> 
+
+        </div>
+       
     )
+
 }
 
-export default SpotImages;
+export default SpotImage;

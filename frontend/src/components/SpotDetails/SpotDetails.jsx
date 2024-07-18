@@ -2,7 +2,9 @@ import { useEffect } from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useParams} from 'react-router-dom';
 import { getSpotDetails } from '../../store/spot';
-import { getAllReviews } from "../../store/review";
+// import { getAllReviews } from "../../store/review";
+import SpotImage from "../SpotImage/SpotImages";
+import Reviews from '../Reviews/Reviews';
 import { FaStar } from "react-icons/fa";
 import { LuDot } from "react-icons/lu";
 import './SpotDetails.css';
@@ -12,16 +14,16 @@ const SpotDetails = () => {
   const dispatch = useDispatch();
   const {spotId} = useParams();
   const spot = useSelector((state) => state.spots[spotId]);
-  const reviews = useSelector(state => Object.values(state.reviews));
+  // const reviews = useSelector(state => Object.values(state.reviews));
 
   // console.log('>>>>>>>>>>>>>>>>>>>',spot)
 
   useEffect(() => {
     dispatch(getSpotDetails(spotId));
-    dispatch(getAllReviews(spotId));
+    // dispatch(getAllReviews(spotId));
   }, [dispatch, spotId]);
 
-  if (!spot || !spot.SpotImages) return <h2>Loading...</h2>;
+  if (!spot) return <h2>Loading...</h2>;
 
   const handleClick = (e) => {
       e.preventDefault();
@@ -34,23 +36,23 @@ const SpotDetails = () => {
     return avgRating;
   };
 
-  const images = [];
-    spot.SpotImages.forEach(image => {
-        if (image.preview === true) {
-            images.unshift(image)
-        } else {
-            images.push(image)
-        }
-  });
+  // const images = [];
+  //   spot.SpotImages.forEach(image => {
+  //       if (image.preview === true) {
+  //           images.unshift(image)
+  //       } else {
+  //           images.push(image)
+  //       }
+  // });
 
-  const months = ["January","February","March","April","May","June","July","August","September","October","November","December"]
+  // const months = ["January","February","March","April","May","June","July","August","September","October","November","December"]
 
-  const formatReviewDate = (date) => {
-    const dateSplit = date.split('-')
-    const month = Number(dateSplit[1])
-    const year = dateSplit[0]
-    return `${months[month]} ${year}`
-  };
+  // const formatReviewDate = (date) => {
+  //   const dateSplit = date.split('-')
+  //   const month = Number(dateSplit[1])
+  //   const year = dateSplit[0]
+  //   return `${months[month]} ${year}`
+  // };
 
   const numReviewsText = (numReviews) => {
     if (numReviews === 0) return '';
@@ -63,18 +65,11 @@ const SpotDetails = () => {
       <h2>{spot.name}</h2>
       <h3>{`${spot.city}, ${spot.state}, ${spot.country}`}</h3>
 
-      <div className="images-div">
-         {images.map((image, index) => (
-            <div key={image.id} className={`image-div image-${index + 1}`}>
-                {/* {console.log(index)} */}
-                <img src={image.url} alt={`Image ${index + 1}`}/>
-            </div>
-         ))}
-      </div>
+      <SpotImage spotId={spotId}/>
 
       <div className="spot-description-reservation">
         <div id='spot-descriptions'>
-            <h2>{`Hosted by ${spot.Owner.firstName} ${spot.Owner.lastName}`}</h2>
+            <h2>{`Hosted by ${spot.Owner?.firstName} ${spot.Owner?.lastName}`}</h2>
             <p>{spot.description}</p>
          </div>
          <div id="reservation">
@@ -90,20 +85,7 @@ const SpotDetails = () => {
          </div>
       </div>
 
-      <div>
-            <ul id="reviews-stats">
-               <li><FaStar />{spot.avgStarRating}</li>
-               <LuDot className={spot.numReviews === 0? 'hide': ''} />
-               <li>{numReviewsText(spot.numReviews)}</li>
-            </ul>
-            {reviews.map(review => (
-                <div key={review.id} className="review">
-                    <h3>{review.User.firstName}</h3>
-                    <h4>{formatReviewDate(review.updatedAt)}</h4>
-                    <p>{review.review}</p>
-                </div>
-            ))}
-         </div>
+      <Reviews spotId={spotId}/>
 
     </div>
   )

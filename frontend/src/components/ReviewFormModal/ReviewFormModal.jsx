@@ -1,87 +1,42 @@
-import React, { useState } from 'react';
-import { useModal } from '../../context/Modal.jsx';
-import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useModal } from '../../context/Modal';
 import { createReview } from '../../store/review';
-// import './ReviewFormModal.css';
+import StarRating from '../StarRating/StarRating';
+// import './ReviewFormModal.css'
 
-const ReviewFormModal = ({ spotId }) => {
+const ReviewFormModal = ({ spotId, onSubmitSuccess }) => {
   const dispatch = useDispatch();
-  const [show, setShow] = useState(false);
-  const [rating, setRating] = useState(0);
-  const [comment, setComment] = useState('');
-  const [errors, setErrors] = useState({});
-  const [hasSubmitted, setHasSubmitted] = useState(false);
-  const sessionUser = useSelector(state => state.session.user);
+  const { closeModal } = useModal();
+  const [review, setReview] = useState('');
+  const [stars, setStars] = useState(0);
 
-  const openModal = () => setShow(true);
-  const closeModal = () => {
-    setShow(false);
-    setRating(0);
-    setComment('');
-    setErrors({});
-    setHasSubmitted(false);
-  };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setHasSubmitted(true);
-
-    const newErrors = {};
-    if (comment.length < 10) newErrors.comment = 'Comment must be at least 10 characters long';
-    if (rating === 0) newErrors.rating = 'Rating is required';
-    setErrors(newErrors);
-
-    if (Object.keys(newErrors).length > 0) return;
-
-    const reviewData = {
-      spotId,
-      userId: sessionUser.id,
-      rating,
-      comment,
-    };
-
-    const createdReview = await dispatch(createReview(reviewData));
-    if (createdReview && !createdReview.errors) {
-      closeModal();
-    } else {
-      setErrors({ ...errors, server: createdReview.errors });
+    const newReview = { review, stars };
+    await dispatch(createReview(newReview, spotId));
+    if (onSubmitSuccess) {
+      onSubmitSuccess();
     }
+    closeModal();
   };
 
+
   return (
-    <>
-      <button onClick={openModal}>Post Your Review</button>
-      <Modal show={show} onHide={closeModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>How was your stay?</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <form onSubmit={handleSubmit}>
-            {hasSubmitted && errors.server && <p>{errors.server}</p>}
-            <div>
-              <label>Stars</label>
-              <input
-                type="number"
-                min="1"
-                max="5"
-                value={rating}
-                onChange={(e) => setRating(Number(e.target.value))}
-              />
-              {hasSubmitted && errors.rating && <p>{errors.rating}</p>}
-            </div>
-            <div>
-              <label>Leave your review here...</label>
-              <textarea
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-              />
-              {hasSubmitted && errors.comment && <p>{errors.comment}</p>}
-            </div>
-            <button type="submit" disabled={comment.length < 10 || rating === 0}>Submit Your Review</button>
-          </form>
-        </Modal.Body>
-      </Modal>
-    </>
+    <form onSubmit={handleSubmit} className="review_form">
+      <h1>How was your stay?</h1>
+      <textarea
+        placeholder="Leave your review here..."
+        value={review}
+        onChange={(e) => setReview(e.target.value)}
+      />
+      <div className='star_div'><span>Stars:</span><span><StarRating rating={stars} setRating={setStars}/></span></div>
+      <button type="submit" disabled={review.length < 10 || stars === 0}>
+        Submit Your Review
+      </button>
+    </form>
   );
 };
 
