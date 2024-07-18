@@ -6,6 +6,8 @@ const GET_SPOT_DETAILS = 'spots/GET_SPOT_DETAILS';
 const CREATE_SPOT = "spot/CREATE_SPOT";
 const DELETE_SPOT = "spot/DELETE_SPOT";
 
+const ADD_SPOTIMAGES = "add/spotImages";
+
 // Action Creators
 // Get all spots
 export const getSpots = (spots) => {
@@ -36,6 +38,14 @@ const removeSpot = (spotId) => {
       spotId,
     };
 };
+
+// Add spot images
+const addImage = (spot) => {
+    return {
+      type: ADD_SPOTIMAGES,
+      payload: spot,
+    };
+};  
 
 // Thunk Action Creators
 // Get all spots
@@ -68,6 +78,19 @@ export const getSpotDetails = (spotId) => async (dispatch) => {
     }
 };
 
+// Get all spots of a current user
+export const getAllSpotsCurrentUser = () => async (dispatch) => {
+    const response = await csrfFetch('/api/spots/current');
+    if(response.ok) {
+        const spots = await response.json();
+        dispatch(getSpots(spots.Spots));
+        return spots;
+    } else {
+        const error = await response.json();
+        return error;
+    }
+};
+
 // Create a spot
 export const createSpot = (spot) => async (dispatch) => {
     // console.log('>>>>>>>>>>>>>>>> IN THUNK', spot)
@@ -88,45 +111,31 @@ export const createSpot = (spot) => async (dispatch) => {
     }
 };
 
-// Get all spots of a current user
-export const getAllSpotsCurrentUser = () => async (dispatch) => {
-    const response = await csrfFetch('/api/spots/current');
-    if(response.ok) {
-        const spots = await response.json();
-        dispatch(getSpots(spots.Spots));
-        return spots;
+// Update a spot
+export const editSpot = (spot) => async (dispatch) => {
+    // console.log('>>>>>>>>>>>>>>>> IN THUNK', spot)
+    const response = await csrfFetch(`/api/spots/${spot.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(spot),
+    });
+
+    if (response.ok) {
+        const updatedSpot = await response.json();
+        // console.log('>>>>>>>>>>>>>>>>> UPDATED SPOT', updatedSpot)
+        dispatch(getOneSpot(updatedSpot));
+        // console.log('>>>>>>>>>>>>>>>>> AFTER DISPATCH')
+        return updatedSpot;
     } else {
         const error = await response.json();
         return error;
     }
 };
 
-// Update a spot
-export const editSpot = (spot) => async (dispatch) => {
-    try {
-        const response = await csrfFetch(`/api/spots/${spot.id}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(spot),
-        });
-
-        if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.message);
-        }
-
-        const updatedSpot = await response.json();
-        dispatch(getOneSpot(updatedSpot));
-        return updatedSpot;
-    } catch (error) {
-        console.error("Caught error in editSpot thunk:", error);
-        return { error: 'Something went wrong.' };
-    }
-};
-
 // Delete a spot
 export const deleteSpot = (spotId) => async (dispatch) => {
-    const response = await csrfFetch(`api/spots/${spotId}`, {
+    console.log('>>>>>>>>>>>>>>>>> IN THUNK')
+    const response = await csrfFetch(`/api/spots/${spotId}`, {
       method: "DELETE",
     });
     if (response.ok) {
@@ -135,6 +144,22 @@ export const deleteSpot = (spotId) => async (dispatch) => {
     } else {
       const error = await response.json();
       return error;
+    }
+};
+
+// Add spot images
+export const addSpotImage = (images) => async (dispatch) => {
+    const { spotId, url, preview } = images;
+    const response = await csrfFetch(`/api/spots/${spotId}/images`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ url, preview }),
+    });
+    if (response.ok) {
+      const imagesObj = await response.json();
+      dispatch(addImage(imagesObj));
     }
 };
 
@@ -175,6 +200,17 @@ const spotsReducer = (state = {}, action) => {
         case DELETE_SPOT: {
             const newState = { ...state };
             delete newState[action.spotId];
+            return newState;
+        }
+        case ADD_SPOTIMAGES: {
+            const newState = { ...state };
+            const { spotId, url, preview } = action.payload;
+            if (spotId && newState.spots[spotId]) {
+              newState.spots[spotId].SpotImages = [
+                ...(newState.spots[spotId].SpotImages || []),
+                { url, preview },
+              ];
+            }
             return newState;
         }
         default: 

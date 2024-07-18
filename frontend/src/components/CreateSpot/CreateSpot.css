@@ -1,0 +1,126 @@
+.create-spot-div {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.create-spot-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.create-spot-title {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.create-spot-title h2 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.create-spot-title h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.create-spot-title p {
+  font-size: 1rem;
+  color: #666;
+}
+
+.fill-out-form,
+.city-state {
+  margin-bottom: 20px;
+}
+
+.fill-out-form label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.fill-out-form input,
+.fill-out-form textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.fill-out-form textarea {
+  min-height: 100px;
+}
+
+.city-state {
+  display: flex;
+  justify-content: space-between;
+}
+
+.city-state .fill-out-form {
+  flex: 1;
+}
+
+.city-state .fill-out-form + .fill-out-form {
+  margin-left: 20px;
+}
+
+.create-spot-price {
+  display: flex;
+  align-items: center;
+}
+
+.create-spot-price input {
+  width: auto;
+  flex: 1;
+  margin-left: 10px;
+}
+
+.line-break {
+  border-top: 1px solid #ccc;
+  margin: 20px 0;
+}
+
+.error {
+  color: red;
+  font-size: 0.875rem;
+  margin-top: 5px;
+}
+
+button {
+  background-color: #ff385c;
+  color: #fff;
+  font-size: 1rem;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+button:hover {
+  background-color: #e60042;
+}
+
+.title {
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-bottom: 5px;
+}
+
+p {
+  font-size: 0.875rem;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+/* input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+} */

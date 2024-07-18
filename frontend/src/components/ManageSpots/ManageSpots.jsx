@@ -38,6 +38,8 @@ const ManageSpots = () => {
           <DeleteModal
             onDelete={() => handleDelete(spotId)}
             onClose={closeModal}
+            message="Are you sure you want to remove this spot?"
+            type="Spot"
           />
         );
     };
@@ -60,7 +62,7 @@ const ManageSpots = () => {
             <div className="manage-spots-div">
 
                 <div className="manage-spots-image-div">
-                {spotsCurrUser.map((spot) => (
+                {spotsCurrUser.sort((a, b) => b.id - a.id).map((spot) => (
                 <div key={spot.id} className="manage-spot-div">
                 <Link key={spot.id} to={`/spots/${spot.id}`} className="manage-spot-link">
                 <img src={spot.previewImage} alt={spot.name} />
