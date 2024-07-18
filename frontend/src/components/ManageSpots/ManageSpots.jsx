@@ -25,6 +25,8 @@ const ManageSpots = () => {
     // Ensure that the spots are filtered correctly for the current user
     const spotsCurrUser = allSpots.filter((spot) => spot.ownerId === currentUser.id);
 
+    if (!spotsCurrUser) return null;
+
     const handleRating = (avgRating) => {
         avgRating = (+avgRating).toFixed(1);
         if (isNaN(avgRating) || avgRating === '0.0') avgRating = 'New';
@@ -41,7 +43,7 @@ const ManageSpots = () => {
     };
 
     const handleDelete = async (spotId) => {
-        await dispatch(deleteSpot(spotId));
+        dispatch(deleteSpot(spotId));
         closeModal();
     };
 
@@ -51,7 +53,7 @@ const ManageSpots = () => {
                 {/* Added header container to align the heading and create spot link */}
                 <h1>Manage Spots</h1>
                 {spotsCurrUser.length === 0 && (
-                    <Link to="/spots/new" className="create-spot-button">Create a New Spot</Link>
+                    <Link to="/spots/new" className="create-spot-link">Create a New Spot</Link>
                     // Added conditional rendering for the "Create a New Spot" link
                 )}
             </div>
@@ -75,10 +77,8 @@ const ManageSpots = () => {
                     <button><Link to={`/spots/${spot.id}/edit`}>Update</Link></button>
                     <button onClick={() => handleClick(spot.id)}>Delete</button>
                 </div>
-
                 
             </div>
-
             ))}
             </div>
         </div>

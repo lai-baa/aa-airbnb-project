@@ -1,0 +1,72 @@
+/* Overlay for the modal to darken the background */
+.delete-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Main modal container */
+.delete-modal {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 400px;
+    max-width: 90%;
+}
+
+/* Modal header */
+.delete-modal h2 {
+    margin-top: 0;
+    font-size: 24px;
+}
+
+/* Modal message */
+.delete-modal p {
+    margin: 20px 0;
+    font-size: 16px;
+    color: #333;
+}
+
+/* Container for the modal buttons */
+.delete-modal-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+/* Delete button */
+.delete-yes {
+    background: #ff5a5f;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* Cancel button */
+.delete-no {
+    background: darkgrey;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* Hover effects for buttons */
+.delete-yes:hover,
+.delete-no:hover {
+    opacity: 0.8;
+}

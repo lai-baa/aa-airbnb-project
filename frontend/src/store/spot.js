@@ -98,22 +98,22 @@ export const getAllSpotsCurrentUser = () => async (dispatch) => {
     }
 };
 
-// // Edit a spot
-// export const editSpot = (spot) => async (dispatch) => {
-//     const response = await csrfFetch(`api/spots/${spot.id}`, {
-//       method: "PUT",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify(spot),
-//     });
-//     if (response.ok) {
-//       const editedSpot = await response.json();
-//       dispatch(addSpot(editedSpot));
-//       return editedSpot;
-//     } else {
-//       const error = await response.json();
-//       return error;
-//     }
-// };
+// Update a spot
+export const editSpot = (spot) => async (dispatch) => {
+    const response = await csrfFetch(`api/spots/${spot.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(spot),
+    });
+    if (response.ok) {
+      const updatedSpot = await response.json();
+      dispatch(addSpot(updatedSpot));
+      return updatedSpot;
+    } else {
+      const error = await response.json();
+      return error;
+    }
+};
 
 // Delete a spot
 export const deleteSpot = (spotId) => async (dispatch) => {
