@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { editSpot } from '../../store/spot';
-import './UpdateSpot.css';
+// import './UpdateSpot.css';
 
-export const UpdatedSpot = () => {
+export const UpdateSpot = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { spotId } = useParams(); // Get the spot ID from the URL parameters
@@ -16,6 +16,8 @@ export const UpdatedSpot = () => {
 	const [state, setState] = useState('');
 	const [description, setDescription] = useState('');
 	const [title, setTitle] = useState('');
+	const [lat, setLat] = useState('');
+    const [lng, setLng] = useState('');
 	const [price, setPrice] = useState('');
 	const [image1, setImage1] = useState('');
 	const [image2, setImage2] = useState('');
@@ -37,6 +39,8 @@ export const UpdatedSpot = () => {
             setDescription(spot.description);
             setTitle(spot.name);
             setPrice(spot.price);
+			setLat(spot.lat || '');
+            setLng(spot.lng || '');
             if (spot.SpotImages && spot.SpotImages.length > 0) {
                 const images = spot.SpotImages.map(image => image.url);
                 setImage1(images[0] || '');
@@ -76,23 +80,30 @@ export const UpdatedSpot = () => {
 		else if (id === 'description') setDescription(value);
 		else if (id === 'title') setTitle(value);
 		else if (id === 'price') setPrice(value);
+		else if (id === 'lat') setLat(value);
+        else if (id === 'lng') setLng(value);
 		else if (id === 'image1') setImage1(value);
 		else if (id === 'image2') setImage2(value);
 		else if (id === 'image3') setImage3(value);
 		else if (id === 'image4') setImage4(value);
 		else if (id === 'image5') setImage5(value);
 	};
-    const handleSubmit = async (e) => {
+	
+	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setHasSubmitted(true);
-		const spot = {
-			country: country,
-			address: address,
-			city: city,
-			state: state,
-			description: description,
+	
+		if (!formIsValid) return;
+	
+		const updatedSpotData = {
+			id: spotId,
+			country,
+			address,
+			city,
+			state,
+			description,
 			name: title,
-			price: price,
+			price,
 			images: [
 				image1,
 				image2,
@@ -101,18 +112,23 @@ export const UpdatedSpot = () => {
 				image5,
 			].filter((url) => url),
 		};
-
-		const updatedSpot = await dispatch(editSpot(spot));
-		if (updatedSpot) {
+	
+		console.log("Submitting updated spot data:", updatedSpotData); // Logging for debugging
+	
+		const updatedSpot = await dispatch(editSpot(updatedSpotData));
+		if (updatedSpot && !updatedSpot.error) {
+			console.log("Updated spot returned from dispatch:", updatedSpot); // Logging for debugging
 			navigate(`/spots/${updatedSpot.id}`);
+		} else {
+			console.error("Updated spot returned from dispatch:", updatedSpot);
 		}
 	};
-
+				
     return (
 		<div className='update-spot-div'>
 			<form
 				className='update-spot-form'
-				action='POST'
+				action='PUT'
 				onSubmit={handleSubmit}
 			>
 				<div className='update-spot-title'>
@@ -124,13 +140,13 @@ export const UpdatedSpot = () => {
 					</p>
 				</div>
 				{hasSubmitted && Object.keys(errors).length > 0 && (
-					<div className='error-messages'>
+					<div className='update-spot-error-messages'>
 						{Object.values(errors).map((error, index) => (
 							<p key={index}>{error}</p>
 						))}
 					</div>
 				)}
-				<div className='form-info form-div-structure'>
+				<div className='update-form-info'>
 					<label htmlFor='country'>Country</label>
 					<input
 						id='country'
@@ -140,7 +156,7 @@ export const UpdatedSpot = () => {
 						onChange={handleChange}
 					/>
 					{hasSubmitted && errors.country && (
-						<p className='error'>{errors.country}</p>
+						<p className='update-error'>{errors.country}</p>
 					)}
 
 					<label htmlFor='address'>Street Address</label>
@@ -182,10 +198,29 @@ export const UpdatedSpot = () => {
 								<p className='error'>{errors.state}</p>
 							)}
 						</div>
+						<div className='lat-div'>
+							<label htmlFor='lat'>Latitude</label>
+							<input
+								id='lat'
+								placeholder='Latitude'
+								type='text'
+								value={lat}
+								onChange={handleChange}
+							/>
+						</div>
+						<div className='lng-div'>
+							<label htmlFor='lng'>Longitude</label>
+							<input
+								id='lat'
+								placeholder='Longitude'
+								type='text'
+								value={lng}
+								onChange={handleChange}
+							/>
+						</div>
 					</div>
 				</div>
 
-				<div className='line-break'></div>
 
 				<div className='form-description form-div-structure'>
 					<div className='form-headers'>
@@ -208,8 +243,6 @@ export const UpdatedSpot = () => {
 					)}
 				</div>
 
-				<div className='line-break'></div>
-
 				<div className='form-title form-div-structure'>
 					<div className='form-headers'>
 						<h3>Create a title for your spot</h3>
@@ -230,8 +263,6 @@ export const UpdatedSpot = () => {
 						<p className='error'>{errors.title}</p>
 					)}
 				</div>
-
-				<div className='line-break'></div>
 
 				<div className='form-price form-div-structure'>
 					<div className='form-headers'>
@@ -256,8 +287,6 @@ export const UpdatedSpot = () => {
 						<p className='error'>{errors.price}</p>
 					)}
 				</div>
-
-				<div className='line-break'></div>
 
 				<div className='image-inputs form-div-structure'>
 					<div className='form-headers'>
@@ -309,10 +338,8 @@ export const UpdatedSpot = () => {
 					/>
 				</div>
 
-				<div className='line-break'></div>
 				<button
 					type='submit'
-					disabled={!formIsValid}
 				>
 					Update Your Spot
 				</button>
@@ -321,4 +348,36 @@ export const UpdatedSpot = () => {
 	);
 };
 
-export default UpdatedSpot;
+export default UpdateSpot;
+
+// import { useParams } from 'react-router-dom';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { useEffect } from 'react';
+// import { getSpotDetails } from '../../store/spot';
+// import SpotForm from '../SpotForm/SpotForm';
+
+
+// const UpdateSpot = () => {
+//   const { spotId } = useParams();
+//   const dispatch = useDispatch();
+//   const spot = useSelector(state => state.spots[spotId]);
+
+//   useEffect(() => {
+//     dispatch(getSpotDetails(spotId))
+//   }, [dispatch, spotId])
+
+//   if (!spot) return null;
+
+//   return (
+//     Object.keys(spot).length > 1 && (
+//       <>
+//         <SpotForm
+//           spot={spot}
+//           formType="Update Your Spot"
+//         />
+//       </>
+//     )
+//   );
+// };
+
+// export default UpdateSpot;

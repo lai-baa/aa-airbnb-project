@@ -100,18 +100,24 @@ export const getAllSpotsCurrentUser = () => async (dispatch) => {
 
 // Update a spot
 export const editSpot = (spot) => async (dispatch) => {
-    const response = await csrfFetch(`api/spots/${spot.id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(spot),
-    });
-    if (response.ok) {
-      const updatedSpot = await response.json();
-      dispatch(addSpot(updatedSpot));
-      return updatedSpot;
-    } else {
-      const error = await response.json();
-      return error;
+    try {
+        const response = await csrfFetch(`/api/spots/${spot.id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(spot),
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message);
+        }
+
+        const updatedSpot = await response.json();
+        dispatch(getOneSpot(updatedSpot));
+        return updatedSpot;
+    } catch (error) {
+        console.error("Caught error in editSpot thunk:", error);
+        return { error: 'Something went wrong.' };
     }
 };
 

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { createSpot } from '../../store/spot';
-import './CreateSpot.css';
+// import './CreateSpot.css';
 
 export const NewSpot = () => {
     const dispatch = useDispatch();
@@ -22,7 +22,6 @@ export const NewSpot = () => {
 	const [image5, setImage5] = useState('');
 	
     const [errors, setErrors] = useState({});
-	const [formIsValid, setFormIsValid] = useState(false);
 	const [hasSubmitted, setHasSubmitted] = useState(false);
 
     useEffect(() => {
@@ -39,8 +38,6 @@ export const NewSpot = () => {
 
 		setErrors(newErrors);
 
-		const isValid = Object.keys(newErrors).length === 0;
-		setFormIsValid(isValid);
 	}, [country, address, city, state, description, title, price, image1]);
 
 	const handleChange = (e) => {
@@ -59,31 +56,63 @@ export const NewSpot = () => {
 		else if (id === 'image4') setImage4(value);
 		else if (id === 'image5') setImage5(value);
 	};
-    const handleSubmit = async (e) => {
+
+	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setHasSubmitted(true);
+
+		const newErrors = {};
+		if (!country) newErrors.country = 'Country is required';
+		if (!address) newErrors.address = 'Street Address is required';
+		if (!city) newErrors.city = 'City is required';
+		if (!state) newErrors.state = 'State is required';
+		if (description.length < 30) newErrors.description = 'Description needs 30 or more characters';
+		if (!title) newErrors.title = 'Title is required';
+		if (!price) newErrors.price = 'Price per night is required';
+		if (!image1) newErrors.image1 = 'Preview Image URL is required';
+
+		setErrors(newErrors);
+
+		if (Object.keys(newErrors).length > 0) {
+			return;
+		}
+
 		const spot = {
-			country: country,
-			address: address,
-			city: city,
-			state: state,
-			description: description,
+			country,
+			address,
+			city,
+			state,
+			description,
 			name: title,
-			price: price,
+			price,
 			images: [
-				image1,
-				image2,
-				image3,
-				image4,
-				image5,
+			image1,
+			image2,
+			image3,
+			image4,
+			image5,
 			].filter((url) => url),
 		};
 
-		const newSpot = await dispatch(createSpot(spot));
-		if (newSpot) {
+		try {
+			const response = await dispatch(createSpot(spot));
+
+			if (response.ok) {
+			const newSpot = await response.json();
 			navigate(`/spots/${newSpot.id}`);
+			} else {
+			const errorData = await response.json();
+			console.error('Error creating spot:', errorData);
+			// Display server-side validation errors
+			setErrors((prevErrors) => ({
+				...prevErrors,
+				...errorData.errors,
+			}));
+			}
+		} catch (error) {
+			console.error('Error creating spot:', error);
 		}
-	};
+	};	
 
     return (
 		<div className='create-spot-div'>
@@ -289,7 +318,7 @@ export const NewSpot = () => {
 				<div className='line-break'></div>
 				<button
 					type='submit'
-					disabled={!formIsValid}
+					onSubmit={handleSubmit}
 				>
 					Create a Spot
 				</button>
@@ -299,3 +328,18 @@ export const NewSpot = () => {
 };
 
 export default NewSpot;
+
+// import SpotForm from "./SpotForm";
+
+// const CreateSpot = () => {
+//   const spot = {};
+
+//   return (
+//     <SpotForm
+//       spot={spot}
+//       formType="Create a New Spot"
+//     />
+//   );
+// };
+
+// export default CreateSpot;
