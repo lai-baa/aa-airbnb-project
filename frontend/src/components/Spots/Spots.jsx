@@ -30,7 +30,7 @@ const Spots = () => {
 
     return (
         <div className='spots-div'>
-            {spots.map(spot => (
+            {spots.sort((a, b) => b.id - a.id).map(spot => (
                 <div key={spot.id} className='spot-div'
                 onClick={() => handleClick(spot)}
                 >

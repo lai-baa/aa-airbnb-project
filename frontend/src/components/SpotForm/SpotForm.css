@@ -1,4 +1,4 @@
-.spot_form form {
+/* .spot-form-div form {
   display: flex;
   flex-direction: column;
   align-items: start;
@@ -6,7 +6,7 @@
   width: 450px;
 }
 
-.spot_form label {
+.spot-form-div label {
   display: flex;
   flex-direction: column;
   align-items: start;
@@ -15,20 +15,20 @@
   width: 100%;
 }
 
-.spot_form input {
+.spot-form-div input {
   width: 450px;
 }
 
-.spot_form textarea {
+.spot-form-div textarea {
   width: 450px;
 }
 
-.spot_form h2 {
+.spot-form-div h2 {
   margin-top: 30px;
   margin-bottom: 10px;
 }
 
-.spot_form button {
+.spot-form-div button {
   padding: 10px 30px;
   border: none;
   border-radius: 5px;
@@ -42,4 +42,4 @@
 .current_spotlist_container button a {
   text-decoration: none;
   color: white;
-}
+} */

@@ -99,7 +99,6 @@ const SpotDetails = () => {
             {reviews.map(review => (
                 <div key={review.id} className="review">
                     <h3>{review.User.firstName}</h3>
-                    {/* {console.log(review)} */}
                     <h4>{formatReviewDate(review.updatedAt)}</h4>
                     <p>{review.review}</p>
                 </div>

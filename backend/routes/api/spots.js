@@ -352,45 +352,26 @@ router.get('/:spotId', async (req, res, next) => {
 });
 
 // Create a Spot
-router.post('/', requireAuth, validateSpot, async (req, res, next) => {
-  const { address, city, state, country, lat, lng, name, description, price } = req.body;
+router.post("/", requireAuth, validateSpot, async (req, res) => {
   const { user } = req;
+  const { address, city, state, country, lat, lng, name, description, price } =
+    req.body;
+  const newSpot = await user.createSpot({
+    ownerId: user.id,
+    address,
+    city,
+    state,
+    country,
+    lat,
+    lng,
+    name,
+    description,
+    price,
+  });
+  newSpot.dataValues.createdAt = moment(newSpot.createdAt).format('YYYY-MM-DD HH:mm:ss');
+  newSpot.dataValues.updatedAt = moment(newSpot.createdAt).format('YYYY-MM-DD HH:mm:ss');
 
-  try {
-    const newSpot = await Spot.create({
-      ownerId: user.id,
-      address,
-      city,
-      state,
-      country,
-      lat,
-      lng,
-      name,
-      description,
-      price
-    });
-
-    // Format createdAt and updatedAt
-    const formattedSpot = {
-      id: newSpot.id,
-      ownerId: newSpot.ownerId,
-      address: newSpot.address,
-      city: newSpot.city,
-      state: newSpot.state,
-      country: newSpot.country,
-      lat: parseFloat(newSpot.lat),
-      lng: parseFloat(newSpot.lng),
-      name: newSpot.name,
-      description: newSpot.description,
-      price: newSpot.price,
-      createdAt: moment(newSpot.createdAt).format('YYYY-MM-DD HH:mm:ss'),
-      updatedAt: moment(newSpot.updatedAt).format('YYYY-MM-DD HH:mm:ss')
-    };
-
-    res.status(201).json(formattedSpot);
-  } catch (error) {
-    next(error);
-  }
+  return res.status(201).json(newSpot);
 });
 
 // Add an Image to a Spot based on the Spot's id

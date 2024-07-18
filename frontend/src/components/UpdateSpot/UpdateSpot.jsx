@@ -351,10 +351,10 @@ export const UpdateSpot = () => {
 export default UpdateSpot;
 
 // import { useParams } from 'react-router-dom';
-// import { useDispatch, useSelector } from 'react-redux';
 // import { useEffect } from 'react';
+// import { useDispatch, useSelector } from 'react-redux';
 // import { getSpotDetails } from '../../store/spot';
-// import SpotForm from '../SpotForm/SpotForm';
+// import SpotForm from './SpotForm';
 
 
 // const UpdateSpot = () => {

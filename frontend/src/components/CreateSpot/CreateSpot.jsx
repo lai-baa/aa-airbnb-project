@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { createSpot } from '../../store/spot';
 // import './CreateSpot.css';
 
-export const NewSpot = () => {
+export const CreateSpot = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -12,6 +12,8 @@ export const NewSpot = () => {
 	const [address, setAddress] = useState('');
 	const [city, setCity] = useState('');
 	const [state, setState] = useState('');
+	const [lat, setLatitude] = useState(1);
+	const [lng, setLongitude] = useState(1);
 	const [description, setDescription] = useState('');
 	const [title, setTitle] = useState('');
 	const [price, setPrice] = useState('');
@@ -47,6 +49,8 @@ export const NewSpot = () => {
 		else if (id === 'address') setAddress(value);
 		else if (id === 'city') setCity(value);
 		else if (id === 'state') setState(value);
+		else if (id === 'lat') setLatitude(value);
+		else if (id === 'lng') setLongitude(value);
 		else if (id === 'description') setDescription(value);
 		else if (id === 'title') setTitle(value);
 		else if (id === 'price') setPrice(value);
@@ -85,21 +89,26 @@ export const NewSpot = () => {
 			description,
 			name: title,
 			price,
-			images: [
-			image1,
+			lat,
+			lng
+		};
+
+		const images = [image1,
 			image2,
 			image3,
 			image4,
 			image5,
-			].filter((url) => url),
-		};
+			].filter((url) => url
+		);
 
 		try {
 			const response = await dispatch(createSpot(spot));
 
-			if (response.ok) {
-			const newSpot = await response.json();
-			navigate(`/spots/${newSpot.id}`);
+			// console.log('>>>>>>>>>>>>>>>>>>>', response)
+
+			if (response) {
+			// const newSpot = await response.json();
+			navigate(`/spots/${response.id}`);
 			} else {
 			const errorData = await response.json();
 			console.error('Error creating spot:', errorData);
@@ -110,6 +119,7 @@ export const NewSpot = () => {
 			}));
 			}
 		} catch (error) {
+			// await error.json();
 			console.error('Error creating spot:', error);
 		}
 	};	
@@ -187,6 +197,28 @@ export const NewSpot = () => {
 							{hasSubmitted && errors.state && (
 								<p className='error'>{errors.state}</p>
 							)}
+						</div>
+
+						<div className='lat-div'>
+							<label htmlFor='lat'>Latitude</label>
+							<input
+								id='lat'
+								placeholder='Latitude'
+								type='text'
+								value={lat}
+								onChange={handleChange}
+							/>
+						</div>
+
+						<div className='lng-div'>
+							<label htmlFor='lng'>Longitude</label>
+							<input
+								id='lng'
+								placeholder='Longitude'
+								type='text'
+								value={lng}
+								onChange={handleChange}
+							/>
 						</div>
 					</div>
 				</div>
@@ -327,12 +359,27 @@ export const NewSpot = () => {
 	);
 };
 
-export default NewSpot;
+export default CreateSpot;
 
 // import SpotForm from "./SpotForm";
 
 // const CreateSpot = () => {
-//   const spot = {};
+//   const spot = {
+//     country: '',
+// 		address: '',
+// 		city: '',
+// 		state: '',
+//     lat: '',
+//     lng: '',
+// 		description: '',
+// 		name: '',
+// 		price: '',
+// 		image1: '',
+// 		image2: '',
+// 		image3: '',
+// 		image4: '',
+// 		image5: '',
+//   };
 
 //   return (
 //     <SpotForm

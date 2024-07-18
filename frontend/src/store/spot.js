@@ -25,7 +25,7 @@ export const getOneSpot = (spot) => ({
 const addSpot = (spot) => {
     return {
       type: CREATE_SPOT,
-      spot,
+      payload: spot,
     };
 };
   
@@ -70,6 +70,7 @@ export const getSpotDetails = (spotId) => async (dispatch) => {
 
 // Create a spot
 export const createSpot = (spot) => async (dispatch) => {
+    // console.log('>>>>>>>>>>>>>>>> IN THUNK', spot)
     const response = await csrfFetch("/api/spots", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -77,7 +78,9 @@ export const createSpot = (spot) => async (dispatch) => {
     });
     if (response.ok) {
         const newSpot = await response.json();
+        // console.log('>>>>>>>>>>>>>>>>> NEW SPOT', newSpot)
         dispatch(addSpot(newSpot));
+        // console.log('>>>>>>>>>>>>>>>>> AFTER DISPATCH')
         return newSpot;
     } else {
         const error = await response.json();
