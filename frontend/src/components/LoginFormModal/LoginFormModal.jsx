@@ -29,7 +29,7 @@ function LoginFormModal() {
 		e.preventDefault();
 		setIsSubmitting(true);
 		setErrors({});
-		return dispatch(sessionActions.login({ credential, password }))
+		dispatch(sessionActions.login({ credential, password }))
 			.then(closeModal)
 			.catch(async (res) => {
 				const data = await res.json();
