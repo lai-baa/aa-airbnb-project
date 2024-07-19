@@ -90,16 +90,10 @@ const reviewsReducer = (state = {}, action) => {
           return newState;
         }
         case DELETE_REVIEW: {
-          const { reviewId, spotId } = action;
-          return {
-            ...state,
-            [spotId]: {
-              ...state[spotId],
-              Reviews: state[spotId].reviews.filter(
-                (review) => review.id !== reviewId
-              ),
-            },
-          };
+          const { reviewId } = action;
+          const reviews = {...state.reviews};
+          delete reviews[reviewId]
+          return reviews;
         }
         default:
             return state;

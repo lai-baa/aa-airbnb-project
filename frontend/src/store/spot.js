@@ -1,3 +1,4 @@
+// import SpotImage from "../components/SpotImage/SpotImages";
 import { csrfFetch } from "./csrf";
 
 // Actions
@@ -6,7 +7,7 @@ const GET_SPOT_DETAILS = 'spots/GET_SPOT_DETAILS';
 const CREATE_SPOT = "spot/CREATE_SPOT";
 const DELETE_SPOT = "spot/DELETE_SPOT";
 
-const ADD_SPOT_IMAGE = 'spots/ADD_SPOT_IMAGE';
+// const ADD_SPOT_IMAGE = 'spots/ADD_SPOT_IMAGE';
 
 // Action Creators
 // Get all spots
@@ -40,10 +41,10 @@ const removeSpot = (spotId) => {
 };
 
 // ADD SPOT IMAGE
-const addImage = (image) => ({
-	type: ADD_SPOT_IMAGE,
-	image,
-});
+// const addImage = (image) => ({
+// 	type: ADD_SPOT_IMAGE,
+// 	image,
+// });
 
 // Thunk Action Creators
 // Get all spots
@@ -146,7 +147,7 @@ export const deleteSpot = (spotId) => async (dispatch) => {
 };
 
 // Ad spot image
-export const addSpotImage = (spotId, image) => async (dispatch) => {
+export const addSpotImage = (spotId, image) => async () => {
 	const response = await csrfFetch(`/api/spots/${spotId}/images`, {
 		method: 'POST',
 		headers: {
@@ -155,11 +156,13 @@ export const addSpotImage = (spotId, image) => async (dispatch) => {
 		body: JSON.stringify(image),
 	});
 
-	if (response.ok) {
-		const newImage = await response.json();
-		dispatch(addImage(newImage));
-		return newImage;
-	}
+    return response;
+
+	// if (response.ok) {
+	// 	const newImage = await response.json();
+	// 	dispatch(addImage(newImage));
+	// 	return newImage;
+	// }
 };
 
 // Initial State
@@ -177,22 +180,15 @@ const spotsReducer = (state = {}, action) => {
             action.spots.forEach(spot => {
                 spots[spot.id] = spot
             })
-            return {...state, ...spots}
+            return {...spots}
         }
         case GET_SPOT_DETAILS: {
-			return { ...state, [action.spot.id]: action.spot };
+			return { ...state, spotDetails: action.spot };
 		}
         case CREATE_SPOT: {
+            console.log(">>>>>>>>>>>", action.payload.id)
             const newState = {
-                ...state,
-                allSpots: {
-                    ...state.allSpots,
-                    [action.payload.id]: action.payload,
-                },
-                spotDetails: {
-                    ...state.spotDetails,
-                    [action.payload.id]: action.payload,
-                },
+                ...state, [action.payload.id]: action.payload
             };
             return newState;
         }
@@ -201,15 +197,12 @@ const spotsReducer = (state = {}, action) => {
             delete newState[action.spotId];
             return newState;
         }
-        case ADD_SPOT_IMAGE: {
-			const newState = { ...state };
-			const spot = newState.spotDetails[action.image.spotId];
-			if (spot) {
-				spot.images = spot.images || [];
-				spot.images.push(action.image);
-			}
-			return newState;
-		}
+        // case ADD_SPOT_IMAGE: {
+		// 	const newState = { ...state, spotDetails: {...state.spotDetails} };
+        //     console.log("NEW STATE Spot details >>>>>>>>>>", newState.spotDetails)
+		// 	newState.spotDetails.spotImages.push(action.image);
+		// 	return newState;
+		// }
         default: 
             return state;
         

@@ -6,7 +6,7 @@ import './SpotImages.css'
 const SpotImage = ({spotId}) => {
     const dispatch = useDispatch();
     
-    const spot = useSelector((state) => state.spots[spotId]);
+    const spot = useSelector((state) => state.spots.spotDetails);
     // console.log("info--->", spot);
 
 

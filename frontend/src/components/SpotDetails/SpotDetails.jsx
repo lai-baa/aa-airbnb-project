@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useParams} from 'react-router-dom';
 import { getSpotDetails } from '../../store/spot';
-import { getAllReviews } from "../../store/review";
+// import { getAllReviews } from "../../store/review";
 import SpotImage from "../SpotImage/SpotImages";
 import Reviews from '../Reviews/Reviews';
 import { FaStar } from "react-icons/fa";
@@ -13,24 +13,28 @@ const SpotDetails = () => {
   // console.log('>>>>>>>>>>>>>>>>>>>>>>>')
   const dispatch = useDispatch();
   const {spotId} = useParams();
-  const spot = useSelector((state) => state.spots[spotId]);
+  const spot = useSelector((state) => state.spots.spotDetails);
   const reviews = useSelector(state => Object.values(state.reviews));
 
-    const hasReviews = reviews && reviews.length > 0;
-    const totalStars = hasReviews ? reviews.reduce((sum, review) => sum + review.stars, 0) : 0;
-    const avgRating = hasReviews ? (totalStars / reviews.length).toFixed(1) : null;
+  // console.log('SPOT --------->>>>>>>>>>>', spot)
 
-  // console.log('>>>>>>>>>>>>>>>>>>>',spot)
+  const spotHasReviews = reviews && reviews.length > 0;
+  const totalStars = spotHasReviews ? reviews.reduce((sum, review) => sum + review.stars, 0) : 0;
+  const avgRating = spotHasReviews ? (totalStars / reviews.length).toFixed(1) : null;
+
+  // console.log('----------->>>>>>>>>>>',spot)
 
   useEffect(() => {
-    dispatch(getSpotDetails(spotId));
+    if(!spot){
+      dispatch(getSpotDetails(spotId));
+    }
     // dispatch(getAllReviews(spotId))
-  }, [dispatch, spotId]);
+  }, [dispatch, spotId, spot]);
 
   // Fetch again after reviews are updated
-  useEffect(() => {
-		dispatch(getSpotDetails(spotId));
-	}, [dispatch, spotId, reviews]);
+  // useEffect(() => {
+	// 	dispatch(getSpotDetails(spotId));
+	// }, [dispatch, spotId, reviews]);
 
   if (!spot || !spot.Owner ) return null;
 

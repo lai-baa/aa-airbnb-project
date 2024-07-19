@@ -11,7 +11,7 @@ export const CreateSpot = () => {
     const currUser = useSelector((state) => state.session.user);
 
     const [errors, setErrors] = useState({});
-	  const [hasSubmitted, setHasSubmitted] = useState(false);
+    const [hasSubmitted, setHasSubmitted] = useState(false);
 
     const [country, setCountry] = useState('');
     const [address, setAddress] = useState('');
