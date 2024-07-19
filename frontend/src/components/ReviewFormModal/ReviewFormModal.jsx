@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useModal } from '../../context/Modal';
 import { createReview } from '../../store/review';
 import StarRating from '../StarRating/StarRating';
-// import './ReviewFormModal.css'
+import './ReviewFormModal.css'
 
 const ReviewFormModal = ({ spotId }) => {
   const dispatch = useDispatch();
@@ -41,7 +41,7 @@ const ReviewFormModal = ({ spotId }) => {
 
 
   return (
-    <form onSubmit={handleSubmit} className="review_form">
+    <form onSubmit={handleSubmit} className="review-form">
       <h1>How was your stay?</h1>
       <textarea
         placeholder="Leave your review here..."
@@ -53,7 +53,7 @@ const ReviewFormModal = ({ spotId }) => {
 
       <div className='star-div'><span>Stars: </span><span><StarRating rating={stars} setRating={setStars}/></span></div>
       {errors.stars && <p className='error-message'>{errors.stars}</p>}
-      <button type="submit" disabled={review.length < 10 || stars < 1}>
+      <button className='submit-button' type="submit" disabled={review.length < 10 || stars < 1}>
         Submit Your Review
       </button>
     </form>

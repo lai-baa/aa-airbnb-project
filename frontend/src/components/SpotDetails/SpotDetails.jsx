@@ -14,14 +14,17 @@ const SpotDetails = () => {
   const dispatch = useDispatch();
   const {spotId} = useParams();
   const spot = useSelector((state) => state.spots[spotId]);
-  // const reviews = useSelector(state => Object.values(state.reviews));
+  const reviews = useSelector(state => Object.values(state.reviews));
 
   // console.log('>>>>>>>>>>>>>>>>>>>',spot)
 
   useEffect(() => {
     dispatch(getSpotDetails(spotId));
-    // dispatch(getAllReviews(spotId));
   }, [dispatch, spotId]);
+
+  useEffect(() => {
+		dispatch(getSpotDetails(spotId));
+	}, [dispatch, spotId, reviews]);
 
   if (!spot) return <h2>Loading...</h2>;
 
