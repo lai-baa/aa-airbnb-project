@@ -6,7 +6,7 @@ const GET_SPOT_DETAILS = 'spots/GET_SPOT_DETAILS';
 const CREATE_SPOT = "spot/CREATE_SPOT";
 const DELETE_SPOT = "spot/DELETE_SPOT";
 
-const ADD_SPOTIMAGES = "add/spotImages";
+const ADD_SPOT_IMAGE = 'spots/ADD_SPOT_IMAGE';
 
 // Action Creators
 // Get all spots
@@ -39,13 +39,11 @@ const removeSpot = (spotId) => {
     };
 };
 
-// Add spot images
-const addImage = (spot) => {
-    return {
-      type: ADD_SPOTIMAGES,
-      payload: spot,
-    };
-};  
+// ADD SPOT IMAGE
+const addImage = (image) => ({
+	type: ADD_SPOT_IMAGE,
+	image,
+});
 
 // Thunk Action Creators
 // Get all spots
@@ -147,20 +145,21 @@ export const deleteSpot = (spotId) => async (dispatch) => {
     }
 };
 
-// Add spot images
-export const addSpotImage = (images) => async (dispatch) => {
-    const { spotId, url, preview } = images;
-    const response = await csrfFetch(`/api/spots/${spotId}/images`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ url, preview }),
-    });
-    if (response.ok) {
-      const imagesObj = await response.json();
-      dispatch(addImage(imagesObj));
-    }
+// Ad spot image
+export const addSpotImage = (spotId, image) => async (dispatch) => {
+	const response = await csrfFetch(`/api/spots/${spotId}/images`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(image),
+	});
+
+	if (response.ok) {
+		const newImage = await response.json();
+		dispatch(addImage(newImage));
+		return newImage;
+	}
 };
 
 // Initial State
@@ -202,17 +201,15 @@ const spotsReducer = (state = {}, action) => {
             delete newState[action.spotId];
             return newState;
         }
-        case ADD_SPOTIMAGES: {
-            const newState = { ...state };
-            const { spotId, url, preview } = action.payload;
-            if (spotId && newState.spots[spotId]) {
-              newState.spots[spotId].SpotImages = [
-                ...(newState.spots[spotId].SpotImages || []),
-                { url, preview },
-              ];
-            }
-            return newState;
-        }
+        case ADD_SPOT_IMAGE: {
+			const newState = { ...state };
+			const spot = newState.spotDetails[action.image.spotId];
+			if (spot) {
+				spot.images = spot.images || [];
+				spot.images.push(action.image);
+			}
+			return newState;
+		}
         default: 
             return state;
         
