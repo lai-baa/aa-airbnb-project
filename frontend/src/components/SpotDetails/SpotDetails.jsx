@@ -14,7 +14,12 @@ const SpotDetails = () => {
   const dispatch = useDispatch();
   const {spotId} = useParams();
   const spot = useSelector((state) => state.spots.spotDetails);
-  const reviews = useSelector(state => Object.values(state.reviews));
+  const reviewsObj = useSelector(state => state.reviews);
+
+  let reviews;
+  if(reviewsObj){
+    reviews = Object.values(reviewsObj)
+  }
 
   // console.log('SPOT --------->>>>>>>>>>>', spot)
 
@@ -28,6 +33,10 @@ const SpotDetails = () => {
     if(!spot){
       dispatch(getSpotDetails(spotId));
     }
+    // console.log('REVIEWS ------------------',reviews)
+    // if(!reviews){
+    //   dispatch(getAllReviews(spotId))
+    // }
     // dispatch(getAllReviews(spotId))
   }, [dispatch, spotId, spot]);
 
@@ -75,8 +84,8 @@ const SpotDetails = () => {
                <div id="right">
                 <li><FaStar />{avgRating}</li>
                 {/* {console.log('>>>>>>>>>>>>>>>>>>',spot)} */}
-                <LuDot />
-                <li>{numReviewsText(spot.numReviews)}</li>
+                <LuDot className={spot.numReviews === 0? 'hide' : ''}/>
+                <li>{numReviewsText(reviews.length)}</li>
                </div>
             </ul>
             <button onClick={handleClick} id="reservation-button">Reserve</button>

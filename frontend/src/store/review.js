@@ -91,7 +91,9 @@ const reviewsReducer = (state = {}, action) => {
         }
         case DELETE_REVIEW: {
           const { reviewId } = action;
-          const reviews = {...state.reviews};
+          // console.log('---------------->>>>>>>>> Rev id',reviewId)
+          const reviews = {...state};
+          // console.log('what are we deleting -------------',reviews[reviewId])
           delete reviews[reviewId]
           return reviews;
         }
