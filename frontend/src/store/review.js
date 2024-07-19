@@ -26,7 +26,7 @@ const removeReview = (reviewId) => {
 // Thunk Action Creators
 // Get all reviews
 export const getAllReviews = (spotId) => async (dispatch) => {
-    console.log('SPOT ID >>>>>>>>>>>>>>>>', spotId)
+    // console.log('SPOT ID >>>>>>>>>>>>>>>>', spotId)
     const response = await fetch(`/api/spots/${spotId}/reviews`);
     if(response.ok) {
         const reviews = await response.json();

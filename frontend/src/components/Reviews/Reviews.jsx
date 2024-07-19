@@ -75,7 +75,7 @@ const Reviews = ({ spotId }) => {
                                 <h3>{review.User?.firstName || (currentUser && currentUser.firstName)}</h3>
                                 <p>{formattedDate}</p>
                                 <p>{review.review}</p>
-                                {console.log('>>>>>>>>>>>>>>>>>>',currentUser)}
+                                {/* {console.log('>>>>>>>>>>>>>>>>>>',currentUser)} */}
                                 {currentUser && currentUser.id === review.userId && !isOwner && (
                                     <button className="delete-review-button" onClick={() => handleDeleteClick(review.id)}>
                                         Delete

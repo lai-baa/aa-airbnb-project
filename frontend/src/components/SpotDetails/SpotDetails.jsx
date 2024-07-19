@@ -16,7 +16,7 @@ const SpotDetails = () => {
   const spot = useSelector((state) => state.spots[spotId]);
   // const reviews = useSelector(state => Object.values(state.reviews));
 
-  // console.log('>>>>>>>>>>>>>>>>>>>',spot)
+  console.log('>>>>>>>>>>>>>>>>>>>',spot)
 
   useEffect(() => {
     dispatch(getSpotDetails(spotId));
@@ -30,10 +30,10 @@ const SpotDetails = () => {
       alert('Feature Coming Soon')
   };
 
-  const handleRating = (avgRating) => {
-    avgRating = (+avgRating).toFixed(1);
-    if (isNaN(avgRating) || avgRating === '0.0') avgRating = 'New';
-    return avgRating;
+  const handleRating = (avgStarRating) => {
+    avgStarRating = (+avgStarRating).toFixed(1);
+    if (isNaN(avgStarRating) || avgStarRating === '0.0') avgStarRating = 'New';
+    return avgStarRating;
   };
 
   // const images = [];
@@ -63,7 +63,7 @@ const SpotDetails = () => {
   return (
     <div className="spot-details-div">
       <h2>{spot.name}</h2>
-      <h3>{`${spot.city}, ${spot.state}, ${spot.country}`}</h3>
+      <h3>Location: {`${spot.city}, ${spot.state}, ${spot.country}`}</h3>
 
       <SpotImage spotId={spotId}/>
 
@@ -77,6 +77,7 @@ const SpotDetails = () => {
                <li id="price"><span style={{fontSize: '18px', fontWeight:'500'}}>{`$${spot.price}`}</span>night</li>
                <div id="right">
                 <li><FaStar />{handleRating(spot.avgStarRating)}</li>
+                {/* {console.log('>>>>>>>>>>>>>>>>>>',spot)} */}
                 <LuDot />
                 <li>{numReviewsText(spot.numReviews)}</li>
                </div>
