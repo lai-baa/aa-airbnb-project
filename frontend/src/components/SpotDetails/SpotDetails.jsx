@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useParams} from 'react-router-dom';
 import { getSpotDetails } from '../../store/spot';
-// import { getAllReviews } from "../../store/review";
+import { getAllReviews } from "../../store/review";
 import SpotImage from "../SpotImage/SpotImages";
 import Reviews from '../Reviews/Reviews';
 import { FaStar } from "react-icons/fa";
@@ -16,45 +16,35 @@ const SpotDetails = () => {
   const spot = useSelector((state) => state.spots[spotId]);
   const reviews = useSelector(state => Object.values(state.reviews));
 
+    const hasReviews = reviews && reviews.length > 0;
+    const totalStars = hasReviews ? reviews.reduce((sum, review) => sum + review.stars, 0) : 0;
+    const avgRating = hasReviews ? (totalStars / reviews.length).toFixed(1) : null;
+
   // console.log('>>>>>>>>>>>>>>>>>>>',spot)
 
   useEffect(() => {
     dispatch(getSpotDetails(spotId));
+    // dispatch(getAllReviews(spotId))
   }, [dispatch, spotId]);
 
+  // Fetch again after reviews are updated
   useEffect(() => {
 		dispatch(getSpotDetails(spotId));
 	}, [dispatch, spotId, reviews]);
 
-  if (!spot) return <h2>Loading...</h2>;
+  if (!spot || !spot.Owner ) return null;
 
   const handleClick = (e) => {
       e.preventDefault();
       alert('Feature Coming Soon')
   };
 
-  const handleRating = (avgStarRating) => {
-    avgStarRating = (+avgStarRating).toFixed(1);
-    if (isNaN(avgStarRating) || avgStarRating === '0.0') avgStarRating = 'New';
-    return avgStarRating;
-  };
+  // console.log('SPOT >>>>>>>>>>>>>>>>>>>>>>',spot)
 
-  // const images = [];
-  //   spot.SpotImages.forEach(image => {
-  //       if (image.preview === true) {
-  //           images.unshift(image)
-  //       } else {
-  //           images.push(image)
-  //       }
-  // });
-
-  // const months = ["January","February","March","April","May","June","July","August","September","October","November","December"]
-
-  // const formatReviewDate = (date) => {
-  //   const dateSplit = date.split('-')
-  //   const month = Number(dateSplit[1])
-  //   const year = dateSplit[0]
-  //   return `${months[month]} ${year}`
+  // const handleRating = (avgStarRating) => {
+  //   avgStarRating = (+avgStarRating).toFixed(1);
+  //   if (isNaN(avgStarRating) || avgStarRating === '0.0') avgStarRating = 'New';
+  //   return avgStarRating;
   // };
 
   const numReviewsText = (numReviews) => {
@@ -79,7 +69,7 @@ const SpotDetails = () => {
             <ul>
                <li id="price"><span style={{fontSize: '18px', fontWeight:'500'}}>{`$${spot.price}`}</span>night</li>
                <div id="right">
-                <li><FaStar />{handleRating(spot.avgStarRating)}</li>
+                <li><FaStar />{avgRating}</li>
                 {/* {console.log('>>>>>>>>>>>>>>>>>>',spot)} */}
                 <LuDot />
                 <li>{numReviewsText(spot.numReviews)}</li>
