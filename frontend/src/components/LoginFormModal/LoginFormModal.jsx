@@ -82,14 +82,14 @@ function LoginFormModal() {
 					<p className='error-message'>{errors.password}</p>
 				)}
 				<button
-					className='login-btn'
+					className='login-button'
 					type='submit'
 					disabled={Object.values(errors).length > 0}
 				>
 					Log In
 				</button>
 				<button
-					className='login-btn'
+					className='demo-login-button'
 					onClick={handleSubmitDemo}
 				>
 					Login as Demo User

@@ -1,7 +1,7 @@
 /* frontend/src/components/LoginFormPage/LoginForm.css */
 
 /* Add your CSS styles here */
-form {
+/* form {
     display: flex;
     flex-direction: column;
     padding: 20px;
@@ -22,4 +22,53 @@ button {
     padding: 10px;
     font-size: 16px;
     cursor: pointer;
+} */
+
+.login-wrapper {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	gap: 1rem;
+    padding: 50px;
+}
+
+.login-form {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 2rem;
+}
+
+label {
+	font-family: sans-serif;
+	display: flex;
+	gap: 2rem;
+}
+
+input:hover {
+	box-shadow: 2px 2px 10px,
+}
+
+.login-button {
+	padding: 0.5rem 1rem;
+	border: solid 2px;
+	border-radius: 5px;
+	background-color: #ff395c;
+	color: white;
+	cursor: pointer;
+	transition: all 0.2s;
+}
+
+.login-button:hover {
+	background-color: #e60042;
+	color: white;
+}
+
+.login-button:disabled {
+	background-color: #cccccc; /* Light gray background */
+	color: #666666; /* Dark gray text */
+	border: solid 2px #cccccc; /* Match border to background */
+	cursor: not-allowed;
+	box-shadow: none;
 }
