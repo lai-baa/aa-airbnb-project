@@ -16,7 +16,7 @@ const SpotDetails = () => {
   const spot = useSelector((state) => state.spots[spotId]);
   // const reviews = useSelector(state => Object.values(state.reviews));
 
-  console.log('>>>>>>>>>>>>>>>>>>>',spot)
+  // console.log('>>>>>>>>>>>>>>>>>>>',spot)
 
   useEffect(() => {
     dispatch(getSpotDetails(spotId));

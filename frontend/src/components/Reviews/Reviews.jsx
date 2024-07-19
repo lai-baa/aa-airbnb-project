@@ -7,11 +7,11 @@ import ReviewFormModal from "../ReviewFormModal/ReviewFormModal";
 import './Reviews.css';
 
 const Reviews = ({ spotId }) => {
+    // console.log(spotId)
     const dispatch = useDispatch();
     const { setModalContent, setOnModalClose, closeModal } = useModal();
 
     const reviews = Object.values(useSelector((state) => state.reviews));
-    // const reviewsArr = reviews ? Object.values(reviews) : [];
 
     // console.log("REVIEWS ARRAY >>>>>>>>>>>>>>>>", reviewsArr)
     // console.log('>>>>>>>>>>>>>>>', reviewsArr.length)
