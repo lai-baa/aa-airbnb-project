@@ -1,83 +1,102 @@
 // frontend/src/components/LoginFormModal/LoginFormModal.jsx
 
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
+import * as sessionActions from '../../store/session';
 import { useDispatch } from 'react-redux';
-import { login } from '../../store/session.js';
-import { useModal } from '../../context/modal.jsx';
+import { useModal } from '../../context/Modal';
 import './LoginForm.css';
 
-const LoginFormModal = () => {
-    const dispatch = useDispatch();
+function LoginFormModal() {
+	const dispatch = useDispatch();
+	const [credential, setCredential] = useState('');
+	const [password, setPassword] = useState('');
+	const [errors, setErrors] = useState({});
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const { closeModal } = useModal();
 
-    const [credential, setCredential] = useState('');
-    const [password, setPassword] = useState('');
-    const [errors, setErrors] = useState({});
-    const [disabled, setDisabled] = useState(true)
-    const { closeModal } = useModal();
+	useEffect(() => {
+		const disable = {};
+		if (credential.length < 4) {
+			disable.credential = 'Username must be longer than 4 characters';
+		}
+		if (password.length < 6) {
+			disable.password = 'Password must be longer than 6 characters';
+		}
+		setErrors(disable);
+	}, [credential, password]);
 
-    const handleSumbit = async (e) => {
-        e.preventDefault();
-        setErrors({});
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		setIsSubmitting(true);
+		setErrors({});
+		return dispatch(sessionActions.login({ credential, password }))
+			.then(closeModal)
+			.catch(async (res) => {
+				const data = await res.json();
+				if (data && data.errors) {
+					setErrors(data.errors);
+				} else {
+					setErrors({ credential: 'The provided credentials were invalid.' });
+				}
+			});
+	};
 
-        const payload = {
-            credential,
-            password
-        }
-        return dispatch(login(payload))
-            .then(closeModal)
-            .catch(async (res) => {
-                const data = await res.json();
-                if (data && data.errors) {
-                    setErrors(data.errors)
-                } 
-                if (data.message) {
-                    setErrors({message: "The provided credentials were invalid"});
-                }
-            });
-    }
+	const handleSubmitDemo = (e) => {
+		e.preventDefault();
+		setIsSubmitting(true);
+		setErrors({});
+		return dispatch(
+			sessionActions.login({ credential: 'Demo-lition', password: 'password' })
+		).then(closeModal);
+	};
 
-    const demoUser = () => {
-        setCredential('Demo-lition');
-        setPassword('password');
-        return dispatch(login({credential, password}))
-            .then(closeModal);
-    }
-
-    useEffect(() => {
-        if (credential.length >= 4 && password.length >= 6) {
-            setDisabled(false)
-        }
-        setErrors({})
-    }, [credential, password])
-
-    return (
-        <div>
-        <form onSubmit={handleSumbit} className='userForm'>
-        <h2 >Log In</h2>
-            {errors.message && <p className='error'>The provided credentials were invalid.</p>}
-            <label>
-                Username or Email
-                <input
-                    type="text"
-                    value={credential}
-                    onChange={(e) => setCredential(e.target.value)}
-                    name="credential"
-                />
-            </label>
-            <label>
-                Password
-                <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    name="password"
-                />
-            </label>
-            <button type='submit' disabled={disabled} className={disabled? "disabled" : ""}>Log In</button>
-            <li onClick={() => demoUser()} id='demoUser'>Log in as Demo User</li>
-        </form>
-        </div>
-    )
+	return (
+		<div className='login-wrapper'>
+			<h1>Log In</h1>
+			<form
+				className='login-form'
+				onSubmit={handleSubmit}
+			>
+				<label>
+					Username
+					<input
+						type='text'
+						value={credential}
+						onChange={(e) => setCredential(e.target.value)}
+						required
+					/>
+				</label>
+				{errors.credential && isSubmitting && (
+					<p className='error-message'>{errors.credential}</p>
+				)}
+				<label>
+					Password
+					<input
+						type='password'
+						value={password}
+						onChange={(e) => setPassword(e.target.value)}
+						required
+					/>
+				</label>
+				{errors.password && isSubmitting && (
+					<p className='error-message'>{errors.password}</p>
+				)}
+				<button
+					className='login-btn'
+					type='submit'
+					disabled={Object.values(errors).length > 0}
+				>
+					Log In
+				</button>
+				<button
+					className='login-btn'
+					onClick={handleSubmitDemo}
+				>
+					Login as Demo User
+				</button>
+			</form>
+		</div>
+	);
 }
 
 export default LoginFormModal;
