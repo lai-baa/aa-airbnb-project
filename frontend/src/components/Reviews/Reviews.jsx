@@ -4,6 +4,7 @@ import { deleteReview, getAllReviews } from "../../store/review";
 import { useModal } from '../../context/Modal';
 import DeleteModal from "../DeleteModal/DeleteModal";
 import ReviewFormModal from "../ReviewFormModal/ReviewFormModal";
+import { FaStar } from 'react-icons/fa';
 import './Reviews.css';
 
 const Reviews = ({ spotId }) => {
@@ -59,7 +60,7 @@ const Reviews = ({ spotId }) => {
             {hasReviews ? (
                 <>
                     <h3>
-                        ⭐️ {averageRating} · {reviews.length} {reviews.length === 1 ? "Review" : "Reviews"}
+                        <FaStar /> {averageRating} · {reviews.length} {reviews.length === 1 ? "Review" : "Reviews"}
                     </h3>
                     {!hasReviewed && !isOwner && currentUser && (
                         <button className="post-review-button" onClick={openReviewModal}>
@@ -88,13 +89,13 @@ const Reviews = ({ spotId }) => {
             ) : (
                 currentUser && !isOwner? (
                     <>
-                        <h2>⭐️ New</h2>
+                        <h2><FaStar /> New</h2>
                         <p>Be the first to post a review!</p>
                         <button className="post-review-button" onClick={openReviewModal}>
                             Post Your Review
                         </button>
                     </>
-                ) : <h2>⭐️ New</h2>
+                ) : <h2><FaStar /> New</h2>
             )}
         </div>
     );

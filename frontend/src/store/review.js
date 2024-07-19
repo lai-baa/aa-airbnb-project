@@ -14,13 +14,20 @@ const getReviews = (reviews) => {
     }
 };
 
-const addReview = (review) => ({
+// Create review
+const addReview = (review) => {
+  return {
     type: CREATE_REVIEW,
-    review,
-});
+    payload: review,
+  };
+};
 
-const removeReview = (reviewId) => {
-    return { type: DELETE_REVIEW, payload: reviewId };
+const removeReview = (reviewId, spotId) => {
+  return {
+    type: DELETE_REVIEW,
+    reviewId,
+    spotId,
+  };
 };
 
 // Thunk Action Creators
@@ -37,31 +44,34 @@ export const getAllReviews = (spotId) => async (dispatch) => {
 };
 
 // Create reviews
-export const createReview = (spotId, review) => async (dispatch) => {
-    const response = await csrfFetch(`/api/spots/${spotId}/reviews`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(review),
-    });
-  
-    if (response.ok) {
-      const newReview = await response.json();
-      dispatch(addReview(newReview));
-      return newReview;
-    } else {
-      const error = await response.json();
-      return { error };
-    }
+export const createReview = (review, spotId) => async (dispatch) => {
+  console.log('IN THINK ---------------->>>>>>>>>')
+	const response = await csrfFetch(`/api/spots/${spotId}/reviews`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(review),
+	});
+	if (response.ok) {
+		const review = await response.json();
+		dispatch(addReview(review));
+		return review;
+	}
 };
 
 // Delete a review
-export const deleteReview = (reviewId) => async (dispatch) => {
-    const response = await csrfFetch(`/api/reviews/${reviewId}`, {
-      method: "DELETE",
-    });
-    if (response.ok) {
-      dispatch(removeReview(reviewId));
-    }
+export const deleteReview = (reviewId, spotId) => async (dispatch) => {
+  const response = await csrfFetch(`/api/reviews/${reviewId}`, {
+    method: "DELETE",
+  });
+  if (response.ok) {
+    dispatch(removeReview(reviewId, spotId));
+    return { message: "Successfully deleted" };
+  } else {
+    const error = await response.json();
+    return error;
+  }
 };
 
 // Reducers
@@ -75,16 +85,21 @@ const reviewsReducer = (state = {}, action) => {
             return {...reviews}
         }
         case CREATE_REVIEW: {
-			return { ...state, reviews: [...state.reviews, action.payload] };
-		}
+          const newState = { ...state };
+          newState[action.payload.id] = action.payload;
+          return newState;
+        }
         case DELETE_REVIEW: {
-            const updatedReviews = state.reviews.filter(
-              (review) => review.id !== action.payload
-            );
-            return {
-              ...state,
-              reviews: updatedReviews,
-            };
+          const { reviewId, spotId } = action;
+          return {
+            ...state,
+            [spotId]: {
+              ...state[spotId],
+              Reviews: state[spotId].reviews.filter(
+                (review) => review.id !== reviewId
+              ),
+            },
+          };
         }
         default:
             return state;
