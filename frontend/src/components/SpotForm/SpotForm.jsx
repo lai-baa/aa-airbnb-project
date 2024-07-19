@@ -45,8 +45,27 @@ const SpotForm = ({ spot, formType }) => {
     }
   }, [spot]);
 
+    const validateForm = () => {
+      const newErrors = {};
+      if (!country) newErrors.country = 'Country is required';
+      if (!address) newErrors.address = 'Street Address is required';
+      if (!city) newErrors.city = 'City is required';
+      if (!state) newErrors.state = 'State is required';
+      if (description.length < 30) newErrors.description = 'Description needs 30 or more characters';
+      if (!name) newErrors.name = 'Title is required';
+      if (!price) newErrors.price = 'Price per night is required';
+
+      return newErrors;
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const formErrors = validateForm();
+        if(Object.values(formErrors).length > 0){
+          setErrors(formErrors);
+          return;
+        }
+
         setErrors({});
         spot = {
         ...spot,
@@ -61,23 +80,7 @@ const SpotForm = ({ spot, formType }) => {
         price,
       };
 
-        // image1,
-        // image2,
-        // image3,
-        // image4,
-        // image5,
-
-        // const newErrors = {};
-        // if (!country) newErrors.country = 'Country is required';
-        // if (!address) newErrors.address = 'Street Address is required';
-        // if (!city) newErrors.city = 'City is required';
-        // if (!state) newErrors.state = 'State is required';
-        // if (description.length < 30) newErrors.description = 'Description needs 30 or more characters';
-        // if (!name) newErrors.name = 'Title is required';
-        // if (!price) newErrors.price = 'Price per night is required';
-        // if (!image1) newErrors.image1 = 'Preview Image URL is required';
-    
-        // setErrors(newErrors);
+        // console.log('ERRORS >>>>>>>>>>>>>>>>',errors);
     
         // if (Object.keys(newErrors).length > 0) {
         //   return;
@@ -101,7 +104,7 @@ const SpotForm = ({ spot, formType }) => {
     <div className='spot-form-div'>
     <form  onSubmit={handleSubmit}>
       <h1>{formType}</h1>
-      <div className="errors">{errors.address}</div>
+      {/* <div className="errors">{errors.address}</div> */}
       <div className='spot-location'>
       <h2>Where&apos;s your place located?</h2>
       <p>Guests will only get your exact address once they booked a reservation.</p>
@@ -114,6 +117,7 @@ const SpotForm = ({ spot, formType }) => {
         />
 
       </label>
+      {errors.country && <p className='error-message'>{errors.country}</p>}
       <label>
         Street Address
         <input
@@ -123,6 +127,7 @@ const SpotForm = ({ spot, formType }) => {
         />
 
       </label>
+      {errors.address && <p className='error-message'>{errors.address}</p>}
 
       <div className='spot-city-state'>
       <label>
@@ -134,6 +139,8 @@ const SpotForm = ({ spot, formType }) => {
         />
 
       </label>
+      {errors.city && <p className='error-message'>{errors.city}</p>}
+
       <label>
         State
         <input
@@ -143,6 +150,8 @@ const SpotForm = ({ spot, formType }) => {
         />
 
       </label>
+      {errors.state && <p className='error-message'>{errors.state}</p>}
+
       </div>
       
       <div className='spot-lat-lng'>
@@ -154,6 +163,8 @@ const SpotForm = ({ spot, formType }) => {
           onChange={(e) => setLat(e.target.value)}
         />
       </label>
+      {errors.lat && <p className='error-message'>{errors.lat}</p>}
+
       <label>
         Longitude
         <input
@@ -162,6 +173,7 @@ const SpotForm = ({ spot, formType }) => {
           onChange={(e) => setLng(e.target.value)}
         />
       </label>
+      {errors.lng && <p className='error-message'>{errors.lng}</p>}
       </div>
       
       </div>
@@ -176,6 +188,8 @@ const SpotForm = ({ spot, formType }) => {
           onChange={(e) => setDescription(e.target.value)}
         />
       </label>
+      {errors.description && <p className='error-message'>{errors.description}</p>}
+
       </div>
 
       <div className='spot-name'>
@@ -188,6 +202,7 @@ const SpotForm = ({ spot, formType }) => {
           onChange={(e) => setName(e.target.value)}
         />
       </label>
+      {errors.name && <p className='error-message'>{errors.name}</p>}
       </div>
 
       <div className='spot-price'>
@@ -200,6 +215,7 @@ const SpotForm = ({ spot, formType }) => {
           onChange={(e) => setPrice(e.target.value)}
         />
       </label>
+      {errors.price && <p className='error-message'>{errors.price}</p>}
       </div>
 
       <div className='spot-images'>

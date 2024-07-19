@@ -9,6 +9,7 @@
 }
 
 .post-review-button {
+  width: 25%;
   padding: 5px 20px;
   border: none;
   border-radius: 5px;
@@ -18,6 +19,7 @@
 }
 
 .delete-review-button {
+  width: 25%;
   padding: 5px 20px;
   border: none;
   border-radius: 5px;

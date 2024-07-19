@@ -19,6 +19,10 @@ li {
     display: flex;
 }
 
+/* #create-new-spot-link {
+    text-decoration: none;
+} */
+
 .profile-dropdown {
     display: block;
     position: absolute;

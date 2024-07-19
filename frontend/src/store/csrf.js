@@ -22,7 +22,7 @@ export async function csrfFetch(url, options = {}) {
     // error being the response
     // console.log("ERROR >>>>>>>>>>>>>>>>",await res.json());
     if (res.status >= 400) {
-        console.log('ERROR >>>>>>>>', await res.json())
+        // console.log('ERROR >>>>>>>>', await res.json())
         throw res
     }
 

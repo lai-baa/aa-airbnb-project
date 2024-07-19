@@ -6,6 +6,7 @@ const GET_ALL_SPOTS =  "spot/GET_ALL_SPOTS";
 const GET_SPOT_DETAILS = 'spots/GET_SPOT_DETAILS';
 const CREATE_SPOT = "spot/CREATE_SPOT";
 const DELETE_SPOT = "spot/DELETE_SPOT";
+const GET_UPDATED_SPOT_DETAILS = 'spots/GET_UPDATED_SPOT_DETAILS'
 
 // const ADD_SPOT_IMAGE = 'spots/ADD_SPOT_IMAGE';
 
@@ -22,6 +23,12 @@ export const getSpots = (spots) => {
 export const getOneSpot = (spot) => ({
 	type: GET_SPOT_DETAILS,
 	spot,
+});
+
+// Updating spot
+export const updatingSpot = (spot) => ({
+    type: GET_UPDATED_SPOT_DETAILS,
+    spot
 });
 
 // Add spot
@@ -122,7 +129,7 @@ export const editSpot = (spot) => async (dispatch) => {
     if (response.ok) {
         const updatedSpot = await response.json();
         // console.log('>>>>>>>>>>>>>>>>> UPDATED SPOT', updatedSpot)
-        dispatch(getOneSpot(updatedSpot));
+        dispatch(updatingSpot(updatedSpot));
         // console.log('>>>>>>>>>>>>>>>>> AFTER DISPATCH')
         return updatedSpot;
     } else {
@@ -186,11 +193,15 @@ const spotsReducer = (state = {}, action) => {
 			return { ...state, spotDetails: action.spot };
 		}
         case CREATE_SPOT: {
-            console.log(">>>>>>>>>>>", action.payload.id)
+            // console.log(">>>>>>>>>>>", action.payload.id)
             const newState = {
                 ...state, [action.payload.id]: action.payload
             };
             return newState;
+        }
+        case GET_UPDATED_SPOT_DETAILS: {
+            return {...state, spotDetails: {...state.spotDetails, ...action.spot}}
+
         }
         case DELETE_SPOT: {
             const newState = { ...state };
