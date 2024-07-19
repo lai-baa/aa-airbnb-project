@@ -36,7 +36,7 @@ function LoginFormModal() {
 				// console.log('DATA >>>>>>>>>>>', data)
 				if (data && data.errors) {
 					setErrors(data.errors);
-					console.log('ERRORS ARE HERE >>>>>>>>>>>>', errors)
+					// console.log('ERRORS ARE HERE >>>>>>>>>>>>', errors)
 				} else {
 					setErrors({ credential: 'The provided credentials were invalid.' });
 				}
