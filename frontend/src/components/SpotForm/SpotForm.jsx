@@ -54,21 +54,21 @@ const SpotForm = ({ spot, formType }) => {
       if (description.length < 30) newErrors.description = 'Description needs 30 or more characters';
       if (!name) newErrors.name = 'Title is required';
       if (!price) newErrors.price = 'Price per night is required';
-      if(image1 && (!image1.endsWith('.png') || !image1.endsWith('.jpg') || !image1.endsWith('.jpeg'))){
-        newErrors.image1 = 'Image URL must end with .png, .jpg, or .jpeg' 
-      }
-      if(image2 && (!image2.endsWith('.png') || !image2.endsWith('.jpg') || !image2.endsWith('.jpeg'))){
-        newErrors.image2 = 'Image URL must end with .png, .jpg, or .jpeg' 
-      }
-      if(image3 && (!image3.endsWith('.png') || !image3.endsWith('.jpg') || !image3.endsWith('.jpeg'))){
-        newErrors.image3 = 'Image URL must end with .png, .jpg, or .jpeg' 
-      }
-      if(image4 && (!image4.endsWith('.png') || !image4.endsWith('.jpg') || !image4.endsWith('.jpeg'))){
-        newErrors.image4 = 'Image URL must end with .png, .jpg, or .jpeg' 
-      }
-      if(image5 && (!image5.endsWith('.png') || !image5.endsWith('.jpg') || !image5.endsWith('.jpeg'))){
-        newErrors.image5 = 'Image URL must end with .png, .jpg, or .jpeg' 
-      }
+      // if(image1 && (!image1.endsWith('.png') || !image1.endsWith('.jpg') || !image1.endsWith('.jpeg'))){
+      //   newErrors.image1 = 'Image URL must end with .png, .jpg, or .jpeg' 
+      // }
+      // if(image2 && (!image2.endsWith('.png') || !image2.endsWith('.jpg') || !image2.endsWith('.jpeg'))){
+      //   newErrors.image2 = 'Image URL must end with .png, .jpg, or .jpeg' 
+      // }
+      // if(image3 && (!image3.endsWith('.png') || !image3.endsWith('.jpg') || !image3.endsWith('.jpeg'))){
+      //   newErrors.image3 = 'Image URL must end with .png, .jpg, or .jpeg' 
+      // }
+      // if(image4 && (!image4.endsWith('.png') || !image4.endsWith('.jpg') || !image4.endsWith('.jpeg'))){
+      //   newErrors.image4 = 'Image URL must end with .png, .jpg, or .jpeg' 
+      // }
+      // if(image5 && (!image5.endsWith('.png') || !image5.endsWith('.jpg') || !image5.endsWith('.jpeg'))){
+      //   newErrors.image5 = 'Image URL must end with .png, .jpg, or .jpeg' 
+      // }
 
       return newErrors;
     }
@@ -240,34 +240,39 @@ const SpotForm = ({ spot, formType }) => {
       <label>
         <input
           value={image1}
+          type='url'
           placeholder='Preview Image URL'
           onChange={(e) => setImage1(e.target.value)}
         />
-        {errors.image1 && <p className='error-message'>{errors.image1}</p>}
+        {/* {errors.image1 && <p className='error-message'>{errors.image1}</p>} */}
          <input
           value={image2}
+          type='url'
           placeholder='Image URL'
           onChange={(e) => setImage2(e.target.value)}
         />
-        {errors.image2 && <p className='error-message'>{errors.image2}</p>}
+        {/* {errors.image2 && <p className='error-message'>{errors.image2}</p>} */}
          <input
           value={image3}
+          type='url'
           placeholder='Image URL'
           onChange={(e) => setImage3(e.target.value)}
         />
-        {errors.image3 && <p className='error-message'>{errors.image3}</p>}
+        {/* {errors.image3 && <p className='error-message'>{errors.image3}</p>} */}
          <input
           value={image4}
+          type='url'
           placeholder='Image URL'
           onChange={(e) => setImage4(e.target.value)}
         />
-        {errors.image4 && <p className='error-message'>{errors.image4}</p>}
+        {/* {errors.image4 && <p className='error-message'>{errors.image4}</p>} */}
          <input
           value={image5}
+          type='url'
           placeholder='Image URL'
           onChange={(e) => setImage5(e.target.value)}
         />
-        {errors.image5 && <p className='error-message'>{errors.image5}</p>}
+        {/* {errors.image5 && <p className='error-message'>{errors.image5}</p>} */}
       </label>
       </div>
       

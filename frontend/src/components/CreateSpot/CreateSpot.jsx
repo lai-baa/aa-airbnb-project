@@ -316,7 +316,7 @@ export const CreateSpot = () => {
               Submit a link to at least one photo to publish your spot.
             </p>
             <input
-              type="text"
+              type='url'
               id="image1"
               name="image1"
               placeholder="Preview Image URL"
@@ -328,7 +328,7 @@ export const CreateSpot = () => {
             )}
             {/* Images 2, 3, 4, 5 */}
             <input
-              type="text"
+              type="url"
               id="image2"
               name="image2"
               placeholder="Image URL (optional)"
@@ -340,7 +340,7 @@ export const CreateSpot = () => {
             )} */}
 
             <input
-              type="text"
+              type="url"
               id="image3"
               name="image3"
               placeholder="Image URL (optional)"
@@ -351,7 +351,7 @@ export const CreateSpot = () => {
               <span className="error">{errors.image3}</span>
             )} */}
             <input
-              type="text"
+              type="url"
               id="image4"
               name="image4"
               placeholder="Image URL (optional)"
@@ -362,7 +362,7 @@ export const CreateSpot = () => {
               <span className="error">{errors.image4}</span>
             )} */}
             <input
-              type="text"
+              type="url"
               id="image5"
               name="image5"
               placeholder="Image URL (optional)"
