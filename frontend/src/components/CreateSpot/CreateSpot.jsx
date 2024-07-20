@@ -38,8 +38,23 @@ export const CreateSpot = () => {
         if (!price) error.price = "* Price is required";
         if (!name) error.name = "* Title is required";
         if (!image1) error.image1 = "* Preview image is required.";
-        // if (!image1) error.image1 = "* Image URL must end in .png, .jpg, or .jpeg";
-        setErrors(error);
+        // if(image1 && (!image1.endsWith('.png') || !image1.endsWith('.jpg') || !image1.endsWith('.jpeg'))){
+        //   error.image1 = 'Image URL must end with .png, .jpg, or .jpeg' 
+        // }
+        // if(image2 && (!image2.endsWith('.png') || !image2.endsWith('.jpg') || !image2.endsWith('.jpeg'))){
+        //   error.image2 = 'Image URL must end with .png, .jpg, or .jpeg' 
+        // }
+        // if(image3 && (!image3.endsWith('.png') || !image3.endsWith('.jpg') || !image3.endsWith('.jpeg'))){
+        //   error.image3 = 'Image URL must end with .png, .jpg, or .jpeg' 
+        // }
+        // if(image4 && (!image4.endsWith('.png') || !image4.endsWith('.jpg') || !image4.endsWith('.jpeg'))){
+        //   error.image4 = 'Image URL must end with .png, .jpg, or .jpeg' 
+        // }
+        // if(image5 && (!image5.endsWith('.png') || !image5.endsWith('.jpg') || !image5.endsWith('.jpeg'))){
+        //   error.image5 = 'Image URL must end with .png, .jpg, or .jpeg' 
+        // }
+  
+          setErrors(error);
     }, [country, address, description, name, state, city, price, image1]);
 
     // const handleChange = (e) => {
@@ -332,6 +347,9 @@ export const CreateSpot = () => {
               value={image3}
               onChange={(e) => setImage3(e.target.value)}
             />
+            {/* {errors.image3 && hasSubmitted && (
+              <span className="error">{errors.image3}</span>
+            )} */}
             <input
               type="text"
               id="image4"
@@ -340,6 +358,9 @@ export const CreateSpot = () => {
               value={image4}
               onChange={(e) => setImage4(e.target.value)}
             />
+            {/* {errors.image4 && hasSubmitted && (
+              <span className="error">{errors.image4}</span>
+            )} */}
             <input
               type="text"
               id="image5"
@@ -348,6 +369,9 @@ export const CreateSpot = () => {
               value={image5}
               onChange={(e) => setImage5(e.target.value)}
             />
+            {/* {errors.image5 && hasSubmitted && (
+              <span className="error">{errors.image5}</span>
+            )} */}
           </div>
 
           <button>Create Spot</button>
