@@ -335,9 +335,9 @@ export const CreateSpot = () => {
               value={image2}
               onChange={(e) => setImage2(e.target.value)}
             />
-            {errors.image2 && hasSubmitted && (
+            {/* {errors.image2 && hasSubmitted && (
               <span className="error">{errors.image2}</span>
-            )}
+            )} */}
 
             <input
               type="text"
