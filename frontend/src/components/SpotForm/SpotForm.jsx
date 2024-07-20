@@ -18,11 +18,11 @@ const SpotForm = ({ spot, formType }) => {
   const [description, setDescription] = useState('');
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
-  const [image1, setImage1] = useState('');
-  const [image2, setImage2] = useState('');
-  const [image3, setImage3] = useState('');
-  const [image4, setImage4] = useState('');
-  const [image5, setImage5] = useState('');
+  // const [image1, setImage1] = useState('');
+  // const [image2, setImage2] = useState('');
+  // const [image3, setImage3] = useState('');
+  // const [image4, setImage4] = useState('');
+  // const [image5, setImage5] = useState('');
 
   const [errors, setErrors] = useState({});
 
@@ -37,11 +37,11 @@ const SpotForm = ({ spot, formType }) => {
       setDescription(spot.description || '');
       setName(spot.name || '');
       setPrice(spot.price || '');
-      setImage1(spot.image1 || '');
-      setImage2(spot.image2 || '');
-      setImage3(spot.image3 || '');
-      setImage4(spot.image4 || '');
-      setImage5(spot.image5 || '');
+      // setImage1(spot.image1 || '');
+      // setImage2(spot.image2 || '');
+      // setImage3(spot.image3 || '');
+      // setImage4(spot.image4 || '');
+      // setImage5(spot.image5 || '');
     }
   }, [spot]);
 
@@ -234,7 +234,7 @@ const SpotForm = ({ spot, formType }) => {
       {errors.price && <p className='error-message'>{errors.price}</p>}
       </div>
 
-      <div className='spot-images'>
+      {/* <div className='spot-images'>
       <h2>Liven up your spot with photos</h2>
       <p>Submit a link to at least one photo to publish your spot.</p>
       <label>
@@ -244,37 +244,37 @@ const SpotForm = ({ spot, formType }) => {
           placeholder='Preview Image URL'
           onChange={(e) => setImage1(e.target.value)}
         />
-        {/* {errors.image1 && <p className='error-message'>{errors.image1}</p>} */}
+        {errors.image1 && <p className='error-message'>{errors.image1}</p>}
          <input
           value={image2}
           type='url'
           placeholder='Image URL'
           onChange={(e) => setImage2(e.target.value)}
         />
-        {/* {errors.image2 && <p className='error-message'>{errors.image2}</p>} */}
+        {errors.image2 && <p className='error-message'>{errors.image2}</p>}
          <input
           value={image3}
           type='url'
           placeholder='Image URL'
           onChange={(e) => setImage3(e.target.value)}
         />
-        {/* {errors.image3 && <p className='error-message'>{errors.image3}</p>} */}
+        {errors.image3 && <p className='error-message'>{errors.image3}</p>}
          <input
           value={image4}
           type='url'
           placeholder='Image URL'
           onChange={(e) => setImage4(e.target.value)}
         />
-        {/* {errors.image4 && <p className='error-message'>{errors.image4}</p>} */}
+        {errors.image4 && <p className='error-message'>{errors.image4}</p>}
          <input
           value={image5}
           type='url'
           placeholder='Image URL'
           onChange={(e) => setImage5(e.target.value)}
         />
-        {/* {errors.image5 && <p className='error-message'>{errors.image5}</p>} */}
+        {errors.image5 && <p className='error-message'>{errors.image5}</p>}
       </label>
-      </div>
+      </div> */}
       
       <button className='spot-button'
       type="submit">
