@@ -38,6 +38,9 @@ export const CreateSpot = () => {
         if (!price) error.price = "* Price is required";
         if (!name) error.name = "* Title is required";
         if (!image1) error.image1 = "* Preview image is required.";
+        if (lat < -90 || lat > 90) error.lat = '* Latitude must be within -90 and 90';
+        if (lng < -180 || lng > 180) error.lng = '* Longitude must be within -180 and 180';
+
         // if(image1 && (!image1.endsWith('.png') || !image1.endsWith('.jpg') || !image1.endsWith('.jpeg'))){
         //   error.image1 = 'Image URL must end with .png, .jpg, or .jpeg' 
         // }
@@ -55,7 +58,7 @@ export const CreateSpot = () => {
         // }
   
           setErrors(error);
-    }, [country, address, description, name, state, city, price, image1]);
+    }, [country, address, description, name, state, city, price, image1, lat, lng]);
 
     // const handleChange = (e) => {
     // 	const { id, value } = e.target;

@@ -54,6 +54,9 @@ const SpotForm = ({ spot, formType }) => {
       if (description.length < 30) newErrors.description = 'Description needs 30 or more characters';
       if (!name) newErrors.name = 'Title is required';
       if (!price) newErrors.price = 'Price per night is required';
+      if (lat < -90 || lat > 90) newErrors.lat = '* Latitude must be within -90 and 90';
+      if (lng < -180 || lng > 180) newErrors.lng = '* Longitude must be within -180 and 180';
+
       // if(image1 && (!image1.endsWith('.png') || !image1.endsWith('.jpg') || !image1.endsWith('.jpeg'))){
       //   newErrors.image1 = 'Image URL must end with .png, .jpg, or .jpeg' 
       // }
