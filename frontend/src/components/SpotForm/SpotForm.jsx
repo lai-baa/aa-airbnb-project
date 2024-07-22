@@ -127,6 +127,7 @@ const SpotForm = ({ spot, formType }) => {
         Country
         <input
           value={country}
+          type="text"
           placeholder='Country'
           onChange={(e) => setCountry(e.target.value)}
         />
@@ -137,6 +138,7 @@ const SpotForm = ({ spot, formType }) => {
         Street Address
         <input
           value={address}
+          type="text"
           placeholder='Address'
           onChange={(e) => setAddress(e.target.value)}
         />
@@ -149,6 +151,7 @@ const SpotForm = ({ spot, formType }) => {
         City
         <input
           value={city}
+          type="text"
           placeholder='City'
           onChange={(e) => setCity(e.target.value)}
         />
@@ -160,6 +163,7 @@ const SpotForm = ({ spot, formType }) => {
         State
         <input
           value={state}
+          type="text"
           placeholder='State'
           onChange={(e) => setState(e.target.value)}
         />
@@ -174,6 +178,7 @@ const SpotForm = ({ spot, formType }) => {
         Latitude
         <input
           value={lat}
+          type='number'
           placeholder='Latitude'
           onChange={(e) => setLat(e.target.value)}
         />
@@ -184,6 +189,7 @@ const SpotForm = ({ spot, formType }) => {
         Longitude
         <input
           value={lng}
+          type='number'
           placeholder='Longitude'
           onChange={(e) => setLng(e.target.value)}
         />
@@ -213,6 +219,7 @@ const SpotForm = ({ spot, formType }) => {
       <label>
         <input
           value={name}
+          type="text"
           placeholder='Name of your spot'
           onChange={(e) => setName(e.target.value)}
         />
